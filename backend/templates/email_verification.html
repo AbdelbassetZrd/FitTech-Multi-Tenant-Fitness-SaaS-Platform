@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #131F18;
+      color: #FFFFFF;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrapper {
+      width: 100%;
+      table-layout: fixed;
+      background-color: #131F18;
+      padding-bottom: 60px;
+    }
+    .main {
+      background-color: #0F172A;
+      margin: 40px auto;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      border: 1px solid #1E293B;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      padding: 32px 32px 0 32px;
+      text-align: center;
+    }
+    .logo-container {
+      display: inline-block;
+      text-align: center;
+    }
+    .logo-box {
+      background-color: #2ECC70;
+      color: #131F18;
+      font-size: 24px;
+      font-weight: bold;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 8px;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .logo-text {
+      color: #FFFFFF;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 12px;
+    }
+    .content {
+      padding: 32px;
+      text-align: center;
+    }
+    h1 {
+      color: #FFFFFF;
+      font-size: 24px;
+      margin-bottom: 16px;
+      font-weight: 700;
+      text-align: center;
+    }
+    p {
+      color: #94A3B8;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .button-container {
+      margin: 32px 0;
+      text-align: center;
+    }
+    .button {
+      background-color: #22C55E;
+      color: #FFFFFF !important;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      display: inline-block;
+      text-align: center;
+    }
+    .footer {
+      padding: 24px 32px;
+      border-top: 1px solid #1E293B;
+      text-align: center;
+    }
+    .footer p {
+      color: #64748B;
+      font-size: 14px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <table class="main" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td>
+          <div class="header">
+            <div class="logo-container">
+              <div class="logo-box">F</div>
+              <div class="logo-text">FITTECH</div>
+            </div>
+          </div>
+          <div class="content">
+            <h1>Verify Your Email</h1>
+            <p>Hi {{ user.first_name }},</p>
+            <p>Welcome to FitTech! To complete your registration and unlock your dashboard, please verify your email address by clicking the button below.</p>
+            
+            <div class="button-container">
+              <a href="{{ activation_url }}" class="button">Verify My Account</a>
+            </div>
+            
+            <p style="font-size: 14px; color: #64748B;">This verification link will expire in {{ expiry_days }} day(s).</p>
+          </div>
+          
+          <div class="footer">
+            <p>If you didn't create an account with FitTech, you can safely ignore this email.</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

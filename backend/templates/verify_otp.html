@@ -1,0 +1,9 @@
+<form method="post">
+  {% csrf_token %}
+  <h2>Enter the code sent to your email</h2>
+  {{ form.as_p }} {% for msg in messages %}
+  <p>{{ msg }}</p>
+  {% endfor %}
+  <button type="submit">Verify</button>
+</form>
+<a href="{% url 'request_otp' %}">Resend code</a>

@@ -1,0 +1,71 @@
+name: fittech
+description: FitTech Premium fitness app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_bloc: ^8.1.6
+  bloc: ^8.1.4
+  equatable: ^2.0.5
+
+  # Networking
+  http: ^1.2.1
+  camera: ^0.11.0+2
+  google_mlkit_pose_detection: ^0.13.0
+  google_mlkit_commons: ^0.9.0
+  webview_flutter: ^4.4.2
+  webview_flutter_android: ^4.12.0
+  webview_flutter_wkwebview: ^3.25.1
+  webview_flutter_platform_interface: ^2.15.1
+  url_launcher: ^6.2.5
+
+  # Local Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Dependency Injection
+  get_it: ^7.7.0
+
+  # Functional Programming
+  dartz: ^0.10.1
+
+  # NFC & Device Info
+  nfc_manager: ^3.3.0
+  device_info_plus: ^10.1.0
+
+  # Utils
+  logger: ^2.4.0
+  flutter_secure_storage: ^10.0.0
+
+  # SVG Support
+  flutter_svg: ^2.0.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.12
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+
+# App Launcher Icon Configuration
+# Run: flutter pub run flutter_launcher_icons:main
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/Artboard 1.png"
+  adaptive_icon_background: "#1A1A2E"
+  adaptive_icon_foreground: "assets/Artboard 1.png"

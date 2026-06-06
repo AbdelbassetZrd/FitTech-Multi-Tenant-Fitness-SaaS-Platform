@@ -1,0 +1,49 @@
+# OS & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs & runtime artifacts
+.logs/
+*.log
+*.pid
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*.sqlite3
+build/
+backend/.venv/
+backend/.mypy_cache/
+backend/.pytest_cache/
+backend/staticfiles/
+backend/media/
+.env
+*.env
+
+# Node / Next.js
+node_modules/
+frontend/.next/
+frontend/.turbo/
+frontend/.vercel/
+frontend/.pnpm-store/
+frontend/dist/
+
+# Flutter / Dart
+**/build/
+**/.dart_tool/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/android/.gradle/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# Ngrok artifacts
+ngrok.yml

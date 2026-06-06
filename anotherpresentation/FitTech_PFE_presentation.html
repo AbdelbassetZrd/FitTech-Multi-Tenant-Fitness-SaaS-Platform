@@ -1,0 +1,3051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FitTech Final-Year Project Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0F1E;
+      --panel: #101A2F;
+      --card: #1E3A5F;
+      --card-2: #142642;
+      --accent: #00D4FF;
+      --green: #39FF14;
+      --red: #FF4757;
+      --amber: #FFD166;
+      --text: #F5F9FF;
+      --muted: #A8B8D5;
+      --line: rgba(0, 212, 255, 0.22);
+      --soft: rgba(255,255,255,0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(0,212,255,0.035) 1px, transparent 1px),
+        linear-gradient(rgba(0,212,255,0.035) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(0,212,255,0.08), transparent 34rem),
+        var(--bg);
+      background-size: 4rem 4rem, 4rem 4rem, auto, auto;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(135deg, transparent 0 58%, rgba(57,255,20,0.05) 58.1% 58.3%, transparent 58.4%),
+        linear-gradient(25deg, transparent 0 68%, rgba(0,212,255,0.05) 68.1% 68.3%, transparent 68.4%);
+      opacity: 0.85;
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .top-progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 5px;
+      z-index: 50;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .top-progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      box-shadow: 0 0 24px rgba(57,255,20,0.45);
+      transition: width 450ms ease;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 4.5rem 5vw 4rem;
+      opacity: 0;
+      transform: translateX(3.5rem) scale(0.985);
+      transition: opacity 520ms ease, transform 520ms ease;
+      pointer-events: none;
+      overflow: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .slide.prev {
+      transform: translateX(-3.5rem) scale(0.985);
+    }
+
+    .slide-inner {
+      width: min(1180px, 100%);
+      min-height: calc(100vh - 8.5rem);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.25rem;
+    }
+
+    .section-slide .slide-inner {
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .section-slide {
+      background:
+        linear-gradient(120deg, rgba(0,212,255,0.18), rgba(57,255,20,0.11) 48%, rgba(255,71,87,0.10)),
+        linear-gradient(90deg, rgba(10,15,30,0.92), rgba(10,15,30,0.78));
+    }
+
+    .kicker {
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Poppins, Inter, sans-serif;
+      letter-spacing: 0;
+      line-height: 1.04;
+    }
+
+    h1 {
+      font-size: 4.8rem;
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: 3.15rem;
+      font-weight: 850;
+      max-width: 1050px;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.62;
+      max-width: 920px;
+    }
+
+    .lead {
+      font-size: 1.28rem;
+      color: #DCEBFF;
+      max-width: 980px;
+    }
+
+    .muted { color: var(--muted); }
+    .accent { color: var(--accent); }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .amber { color: var(--amber); }
+
+    .layout-2 {
+      display: grid;
+      grid-template-columns: 1.03fr 0.97fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .layout-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .layout-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .card, .metric, .mini-card {
+      border: 1px solid rgba(0,212,255,0.18);
+      background:
+        linear-gradient(180deg, rgba(30,58,95,0.82), rgba(16,26,47,0.88));
+      border-radius: 8px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.24);
+    }
+
+    .card {
+      padding: 1rem;
+      min-height: 8.6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.8;
+    }
+
+    .card p, .mini-card p { font-size: 0.9rem; line-height: 1.48; }
+    .mini-card { padding: 0.85rem; min-height: 6.8rem; }
+
+    .icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid rgba(57,255,20,0.34);
+      background: rgba(57,255,20,0.08);
+      color: var(--green);
+      border-radius: 8px;
+      font-weight: 900;
+      margin-bottom: 0.8rem;
+      font-size: 0.82rem;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 0.2rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 2rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,212,255,0.26);
+      background: rgba(0,212,255,0.07);
+      color: #D9F8FF;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .callout {
+      border-left: 4px solid var(--green);
+      background: rgba(57,255,20,0.07);
+      padding: 1rem 1.15rem;
+      border-radius: 8px;
+      color: #EFFFF0;
+      font-size: 1.05rem;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .callout.red {
+      border-color: var(--red);
+      background: rgba(255,71,87,0.09);
+      color: #FFECEE;
+    }
+
+    .callout.blue {
+      border-color: var(--accent);
+      background: rgba(0,212,255,0.08);
+      color: #E7FBFF;
+    }
+
+    .dev-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      width: fit-content;
+      min-height: 2rem;
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,209,102,0.42);
+      background: rgba(255,209,102,0.1);
+      color: #FFF1B8;
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .cinematic {
+      display: grid;
+      place-items: center;
+      min-height: 26rem;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,255,0.18);
+      background:
+        linear-gradient(120deg, rgba(0,212,255,0.12), rgba(57,255,20,0.07)),
+        rgba(12,20,38,0.72);
+      padding: 2.2rem;
+    }
+
+    .cinematic .quote {
+      max-width: 1000px;
+      color: #FFFFFF;
+      font-family: Poppins, Inter, sans-serif;
+      font-size: 2.25rem;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+
+    .problem-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .pain {
+      display: grid;
+      grid-template-columns: 2.55rem 1fr;
+      gap: 0.75rem;
+      align-items: start;
+      padding: 0.85rem;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,255,0.17);
+      background: rgba(16,26,47,0.84);
+    }
+
+    .pain-num {
+      display: grid;
+      place-items: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.32);
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .pain h3 {
+      margin-bottom: 0.2rem;
+      color: #FFFFFF;
+      font-size: 1rem;
+    }
+
+    .pain p {
+      font-size: 0.84rem;
+      line-height: 1.42;
+    }
+
+    .slide.dense-slide {
+      padding-top: 2.7rem;
+      padding-bottom: 3rem;
+    }
+
+    .slide.dense-slide .slide-inner {
+      gap: 0.65rem;
+    }
+
+    .slide.dense-slide h2 {
+      font-size: 2.75rem;
+    }
+
+    .slide.dense-slide .lead {
+      font-size: 1.02rem;
+      line-height: 1.35;
+    }
+
+    .slide.dense-slide .code {
+      padding: 0.62rem 0.75rem;
+      font-size: 0.7rem;
+      line-height: 1.35;
+    }
+
+    .slide.dense-slide .diagram {
+      min-height: 11rem;
+      padding: 0.75rem;
+    }
+
+    .slide.dense-slide .flow {
+      min-height: 7.6rem;
+      gap: 0.55rem;
+    }
+
+    .slide.dense-slide .node {
+      min-width: 7.8rem;
+      padding: 0.65rem;
+      font-size: 0.88rem;
+    }
+
+    .slide.dense-slide .node small {
+      font-size: 0.64rem;
+      line-height: 1.25;
+    }
+
+    .slide.dense-slide .mini-card {
+      min-height: 5.2rem;
+      padding: 0.65rem 0.72rem;
+    }
+
+    .slide.dense-slide .mini-card h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.18rem;
+    }
+
+    .slide.dense-slide .mini-card p {
+      font-size: 0.76rem;
+      line-height: 1.32;
+    }
+
+    .slide.dense-slide .bars {
+      padding: 0.7rem 0.85rem;
+      gap: 0.46rem;
+    }
+
+    .slide.dense-slide .bar-row {
+      font-size: 0.8rem;
+    }
+
+    .slide.dense-slide th,
+    .slide.dense-slide td {
+      padding: 0.42rem 0.55rem;
+      font-size: 0.78rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,255,0.18);
+      background: rgba(12,20,38,0.78);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.7rem 0.78rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      color: #E9F2FF;
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--accent);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(0,212,255,0.07);
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .table-tight th, .table-tight td { padding: 0.55rem 0.65rem; font-size: 0.82rem; }
+
+    .bars {
+      display: grid;
+      gap: 0.72rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background: rgba(12,20,38,0.76);
+      border: 1px solid rgba(0,212,255,0.18);
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 13rem 1fr 4.2rem;
+      gap: 0.8rem;
+      align-items: center;
+      color: #DCEBFF;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .bar-track {
+      height: 0.9rem;
+      border-radius: 99px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .bar-fill {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      border-radius: 99px;
+      box-shadow: 0 0 18px rgba(57,255,20,0.3);
+      transition: width 900ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .bar-fill.red { background: linear-gradient(90deg, var(--red), #FF8A96); box-shadow: 0 0 18px rgba(255,71,87,0.28); }
+    .bar-fill.amber { background: linear-gradient(90deg, var(--amber), #FFEF9E); box-shadow: 0 0 18px rgba(255,209,102,0.25); }
+    .slide.active .bar-fill { width: var(--w); }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .metric {
+      padding: 0.95rem;
+    }
+
+    .metric strong {
+      display: block;
+      color: #FFFFFF;
+      font-family: Poppins, Inter, sans-serif;
+      font-size: 1.9rem;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .diagram {
+      min-height: 18rem;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,255,0.18);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        rgba(12,20,38,0.75);
+      background-size: 2rem 2rem;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diagram svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .diagram pre {
+      margin: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 0.9rem;
+      white-space: pre;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      height: 100%;
+      min-height: 12rem;
+    }
+
+    .node {
+      min-width: 8.8rem;
+      max-width: 13rem;
+      padding: 0.85rem;
+      border: 1px solid rgba(0,212,255,0.3);
+      border-radius: 8px;
+      background: rgba(30,58,95,0.75);
+      text-align: center;
+      font-weight: 800;
+      color: #F3FBFF;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset;
+    }
+
+    .node small {
+      display: block;
+      margin-top: 0.35rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-size: 1.65rem;
+      font-weight: 900;
+    }
+
+    .stack-pyramid {
+      display: grid;
+      gap: 0.55rem;
+      justify-items: center;
+      padding: 0.6rem 0;
+    }
+
+    .pyr {
+      height: 2.5rem;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #06111B;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      box-shadow: 0 12px 30px rgba(0,212,255,0.14);
+    }
+
+    .pyr:nth-child(1) { width: 52%; }
+    .pyr:nth-child(2) { width: 64%; }
+    .pyr:nth-child(3) { width: 76%; }
+    .pyr:nth-child(4) { width: 88%; }
+    .pyr:nth-child(5) { width: 100%; }
+
+    .code {
+      white-space: pre-wrap;
+      font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 0.83rem;
+      line-height: 1.55;
+      color: #DFFBFF;
+      background: #07101F;
+      border: 1px solid rgba(0,212,255,0.18);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 22rem;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .logo-mark {
+      position: relative;
+      width: 20rem;
+      height: 20rem;
+      border: 1px solid rgba(0,212,255,0.24);
+      border-radius: 8px;
+      background: rgba(16,26,47,0.72);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .logo-mark::before {
+      content: "";
+      position: absolute;
+      inset: 1.3rem;
+      border: 1px dashed rgba(57,255,20,0.28);
+      border-radius: 8px;
+      animation: pulseBorder 2.6s infinite ease-in-out;
+    }
+
+    .dumbbell {
+      position: relative;
+      width: 13rem;
+      height: 5rem;
+    }
+
+    .dumbbell span {
+      position: absolute;
+      top: 2.1rem;
+      height: 0.8rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      box-shadow: 0 0 26px rgba(57,255,20,0.48);
+    }
+
+    .dumbbell .bar { left: 2rem; right: 2rem; }
+    .dumbbell .p1, .dumbbell .p2, .dumbbell .p3, .dumbbell .p4 {
+      top: 0.8rem;
+      width: 0.92rem;
+      height: 3.6rem;
+      border-radius: 0.35rem;
+      background: #EAF7FF;
+      box-shadow: none;
+    }
+    .dumbbell .p1 { left: 0.8rem; }
+    .dumbbell .p2 { left: 1.8rem; }
+    .dumbbell .p3 { right: 1.8rem; }
+    .dumbbell .p4 { right: 0.8rem; }
+
+    .circuit-dot {
+      position: absolute;
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(57,255,20,0.65);
+      animation: blink 1.8s infinite ease-in-out;
+    }
+    .c1 { left: 4rem; top: 4.5rem; }
+    .c2 { right: 4.4rem; top: 5.7rem; animation-delay: .35s; }
+    .c3 { left: 6.5rem; bottom: 4.4rem; animation-delay: .7s; }
+    .c4 { right: 6rem; bottom: 5.1rem; animation-delay: 1s; }
+
+    .big-section-number {
+      color: rgba(0,212,255,0.18);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: 9rem;
+      font-weight: 900;
+      line-height: 0.8;
+    }
+
+    .line-chart {
+      border: 1px solid rgba(0,212,255,0.18);
+      border-radius: 8px;
+      background: rgba(12,20,38,0.76);
+      min-height: 17rem;
+      padding: 0.9rem;
+    }
+
+    .line-chart svg {
+      width: 100%;
+      height: 14rem;
+      overflow: visible;
+    }
+
+    .line-chart.compact-chart {
+      min-height: 8.6rem;
+      padding: 0.6rem 0.8rem;
+    }
+
+    .line-chart.compact-chart svg {
+      height: 6.4rem;
+    }
+
+    .line-chart path.series {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+    }
+
+    .slide.active .line-chart path.series {
+      animation: drawLine 1.4s ease forwards;
+    }
+
+    .line-chart .axis {
+      stroke: rgba(255,255,255,0.16);
+      stroke-width: 1;
+    }
+
+    .legend {
+      display: flex;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 50%;
+      margin-right: 0.35rem;
+      background: var(--accent);
+    }
+
+    .dot.green { background: var(--green); }
+    .dot.red { background: var(--red); }
+    .dot.amber { background: var(--amber); }
+
+    .nav {
+      position: fixed;
+      right: 1.2rem;
+      bottom: 1.05rem;
+      display: flex;
+      gap: 0.6rem;
+      z-index: 60;
+    }
+
+    .nav button {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,255,0.28);
+      color: #FFFFFF;
+      background: rgba(16,26,47,0.92);
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.24);
+    }
+
+    .nav button:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .counter {
+      position: fixed;
+      left: 1.2rem;
+      bottom: 1.35rem;
+      z-index: 60;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.86rem;
+      background: rgba(16,26,47,0.8);
+      border: 1px solid rgba(0,212,255,0.16);
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+    }
+
+    .footnote {
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+
+    .small-list {
+      display: grid;
+      gap: 0.45rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .small-list li {
+      border-left: 2px solid rgba(0,212,255,0.55);
+      background: rgba(0,212,255,0.045);
+      padding: 0.55rem 0.7rem;
+      border-radius: 6px;
+      color: #DCEBFF;
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    .micro-compare {
+      display: grid;
+      grid-template-columns: 0.88fr 1.12fr;
+      gap: 0.95rem;
+      align-items: stretch;
+    }
+
+    .micro-visual {
+      min-height: 14rem;
+      display: grid;
+      gap: 0.7rem;
+      align-content: center;
+    }
+
+    .micro-stack {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .micro-box, .event-pill {
+      border: 1px solid rgba(0,212,255,0.28);
+      background: rgba(20,38,66,0.82);
+      border-radius: 8px;
+      padding: 0.72rem 0.8rem;
+      color: #F3FBFF;
+      font-weight: 850;
+      text-align: center;
+      line-height: 1.25;
+    }
+
+    .micro-box small, .event-pill small {
+      display: block;
+      margin-top: 0.25rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 650;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .service-card {
+      min-height: 4.2rem;
+      padding: 0.68rem 0.78rem;
+    }
+
+    .service-card h3 {
+      font-size: 0.92rem;
+      margin-bottom: 0.18rem;
+    }
+
+    .service-card p {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .flow.compact {
+      gap: 0.55rem;
+      min-height: 8rem;
+    }
+
+    .flow.compact .node {
+      min-width: 7.4rem;
+      padding: 0.7rem 0.65rem;
+      font-size: 0.86rem;
+    }
+
+    .flow.compact .arrow {
+      font-size: 1.25rem;
+    }
+
+    .event-pill {
+      min-width: 8.4rem;
+      border-color: rgba(57,255,20,0.38);
+      background: rgba(57,255,20,0.08);
+      color: #EFFFF0;
+    }
+
+    .topology {
+      display: grid;
+      grid-template-columns: 0.8fr 2.2fr 0.95fr;
+      gap: 0.85rem;
+      align-items: stretch;
+    }
+
+    .container-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .saga-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .saga-track {
+      display: grid;
+      gap: 0.46rem;
+    }
+
+    .saga-step {
+      border: 1px solid rgba(0,212,255,0.22);
+      background: rgba(16,26,47,0.86);
+      border-radius: 8px;
+      padding: 0.62rem 0.75rem;
+      color: #F5F9FF;
+      font-size: 0.88rem;
+      font-weight: 820;
+      line-height: 1.28;
+    }
+
+    .saga-step small {
+      display: block;
+      color: var(--muted);
+      font-weight: 650;
+      margin-top: 0.18rem;
+    }
+
+    .saga-step.success { border-color: #22c55e; background: rgba(34,197,94,0.11); }
+    .saga-step.failure { border-color: #ef4444; background: rgba(239,68,68,0.13); }
+    .saga-step.compensate { border-color: #f97316; background: rgba(249,115,22,0.12); border-style: dashed; }
+
+    .saga-label {
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    @keyframes pulseBorder {
+      0%, 100% { opacity: 0.45; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.02); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.35; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .slide { padding: 4rem 1rem 5rem; }
+      .slide-inner { min-height: auto; }
+      h1 { font-size: 3rem; }
+      h2 { font-size: 2rem; }
+      .cover-grid, .layout-2, .layout-3, .layout-4, .cards, .metric-grid {
+        grid-template-columns: 1fr;
+      }
+      .logo-mark { width: 15rem; height: 15rem; }
+      .bar-row { grid-template-columns: 1fr; gap: 0.35rem; }
+      .nav { right: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-progress"><span id="progressFill"></span></div>
+  <main id="deck" class="deck" aria-live="polite"></main>
+  <div id="counter" class="counter">Slide 1 / 1</div>
+  <div class="nav" aria-label="Slide navigation">
+    <button id="prevBtn" type="button" aria-label="Previous slide">&lt;</button>
+    <button id="nextBtn" type="button" aria-label="Next slide">&gt;</button>
+  </div>
+
+  <script>
+    const slides = [
+      {
+        cls: "cover-slide",
+        kicker: "Final-Year Project 2024-2025",
+        title: "FitTech",
+        html: `
+          <div class="cover-grid">
+            <div>
+              <div class="kicker">Final-Year Project 2024-2025</div>
+              <h1>FitTech</h1>
+              <p class="lead">Global Gym Management SaaS Platform</p>
+              <p class="lead" style="font-size: 1.02rem; color: var(--green); margin-top: 0.55rem;">Built in Algeria. Designed for the World.</p>
+              <div class="badge-row">
+                <span class="badge">Team: [Team Members]</span>
+                <span class="badge">Supervisor: Mr. Bensaber</span>
+                <span class="badge">Launch market: Algeria</span>
+                <span class="badge">SaaS for global gym brands</span>
+              </div>
+            </div>
+            <div class="logo-mark" aria-label="Animated FitTech logo">
+              <div class="dumbbell">
+                <span class="bar"></span><span class="p1"></span><span class="p2"></span><span class="p3"></span><span class="p4"></span>
+              </div>
+              <span class="circuit-dot c1"></span><span class="circuit-dot c2"></span><span class="circuit-dot c3"></span><span class="circuit-dot c4"></span>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Global Problem, Algeria Launch",
+        title: "The Fitness Industry Today",
+        html: `
+          <p class="lead">The fitness industry is growing worldwide: more gyms, more brands, more members, and more digital expectations every year. Algeria is our launch market and proof of concept.</p>
+          <div class="layout-2">
+            <div class="card"><div class="icon">NOW</div><h3>A global market moving forward</h3><p>Fitness brands are expanding across cities and countries, members expect digital services, and owners need visibility beyond one reception desk.</p></div>
+            <div class="card"><div class="icon">OLD</div><h3>Infrastructure stuck behind</h3><p>Many operations still depend on spreadsheets, WhatsApp groups, paper registers, cash notes, and basic single-gym tools.</p></div>
+          </div>
+          <div class="callout blue">There is no unified, intelligent platform built specifically for the global gym market at scale.</div>
+          <div class="callout">Built in Algeria. Designed for the World.</div>`
+      },
+      {
+        kicker: "Problem Statement",
+        title: "The Real Problems",
+        html: `
+          <div class="problem-list">
+            <div class="pain"><div class="pain-num">1</div><div><h3>Fragmentation</h3><p>A brand that owns 10 gyms across 3 cities has no single place to see all its data. Each gym operates in isolation.</p></div></div>
+            <div class="pain"><div class="pain-num">2</div><div><h3>No Role Hierarchy</h3><p>Existing gym software treats every gym as standalone, with no brand owner overseeing multiple locations and managers.</p></div></div>
+            <div class="pain"><div class="pain-num">3</div><div><h3>Data Security at Scale</h3><p>When brands share infrastructure, Brand A must never see Brand B's members, revenue, or performance data.</p></div></div>
+            <div class="pain"><div class="pain-num">4</div><div><h3>Coaching is Limited</h3><p>Human coaches are expensive, unavailable at night, and cannot serve hundreds of members simultaneously.</p></div></div>
+            <div class="pain"><div class="pain-num">5</div><div><h3>No Predictive Intelligence</h3><p>Admins manage reactively without churn prediction, scheduling optimization, or revenue forecasting from their own data.</p></div></div>
+            <div class="pain"><div class="pain-num">6</div><div><h3>Nutrition Tracking is Manual</h3><p>Members track calories manually or not at all, with no AI-assisted system integrated into the gym membership.</p></div></div>
+          </div>`
+      },
+      {
+        kicker: "The Question",
+        title: "The Question We Asked",
+        html: `
+          <div class="cinematic">
+            <div>
+              <div class="quote">"What if a single platform could manage gym brands worldwide - secure, intelligent, scalable, and built for the way fitness brands actually operate?"</div>
+              <p class="lead" style="margin: 1.4rem auto 0;">That question is FitTech.</p>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Our Answer",
+        title: "FitTech Maps Every Problem to a Product Layer.",
+        html: `
+          <table>
+            <tr><th>Problem</th><th>FitTech Solution</th></tr>
+            <tr><td>Fragmentation</td><td>Centralized SaaS multi-gym dashboard</td></tr>
+            <tr><td>No role hierarchy</td><td>Brand Admin &rarr; Moderator &rarr; Coach model</td></tr>
+            <tr><td>Data security at scale</td><td>Multi-tenant RLS architecture</td></tr>
+            <tr><td>Coaching limitations</td><td>AI Coach with Reflexion Agent</td></tr>
+            <tr><td>No predictive intelligence</td><td>RNN-based analytics for admins</td></tr>
+            <tr><td>Manual nutrition tracking</td><td>AI Calorie Tracker</td></tr>
+          </table>
+          <div class="callout">FitTech is not one feature. It is the product answer to a global operating problem, validated first in Algeria.</div>`
+      },
+      {
+        kicker: "The Problem",
+        title: "Managing One Gym Is Simple. Managing Global Brands Is Not.",
+        html: `
+          <div class="layout-2">
+            <div class="card">
+              <div class="icon">1X</div>
+              <h3>Single gym</h3>
+              <p>One owner, one staff team, one set of members, one local database mindset. The admin sees everything because everything belongs to one place.</p>
+            </div>
+            <div class="card">
+              <div class="icon">NX</div>
+              <h3>Gym network</h3>
+              <p>Multiple brands, many gyms per brand, moderators per branch, coaches per gym, thousands of members, revenue streams, and data that must never leak.</p>
+            </div>
+          </div>
+          <div class="cards">
+            <div class="mini-card"><h3>Fragmented data</h3><p>Spreadsheets, chat messages, cash logs, and disconnected member records.</p></div>
+            <div class="mini-card"><h3>No brand control</h3><p>Owners cannot compare branches, demand, churn, revenue, or staff activity centrally.</p></div>
+            <div class="mini-card"><h3>No AI layer</h3><p>Coaches and members lack always-on support for planning, nutrition, analytics, and tracking.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Product Definition",
+        title: "FitTech Is a Central Operating System for Gym Brands.",
+        html: `
+          <p class="lead">A SaaS platform that lets gym brands manage every gym they own from one dashboard, while still giving each branch the tools it needs for daily work.</p>
+          <div class="cards">
+            <div class="card"><div class="icon">BA</div><h3>Brand admins</h3><p>Control brand-level performance, revenue, plans, moderators, and cross-gym insights.</p></div>
+            <div class="card"><div class="icon">GY</div><h3>Moderators</h3><p>Run one gym: members, subscriptions, classes, maintenance, store, reports, and local operations.</p></div>
+            <div class="card"><div class="icon">AI</div><h3>Members and coaches</h3><p>Use AI coaching, calorie tracking, progress analytics, notifications, chat, wallet, and mobile workflows.</p></div>
+          </div>
+          <div class="callout blue">Product vision: one platform for every gym brand, every location, every city, anywhere in the world.</div>`
+      },
+      {
+        kicker: "Global Scale",
+        title: "From Algeria to the World &mdash; Why FitTech Scales Globally",
+        html: `
+          <div class="metric-grid">
+            <div class="metric"><strong>$96B</strong><span>Global gym market size in 2023</span></div>
+            <div class="metric"><strong>$130B+</strong><span>Projected global market by 2028</span></div>
+            <div class="metric"><strong>200K+</strong><span>Gyms worldwide</span></div>
+            <div class="metric"><strong>0</strong><span>Dominant SaaS built for global multi-brand gym chains</span></div>
+          </div>
+          <div class="cards">
+            <div class="card"><div class="icon">MT</div><h3>No geographic limit</h3><p>Adding a gym in Paris, Dubai, or Toronto requires zero infrastructure changes because tenants are data boundaries, not server copies.</p></div>
+            <div class="card"><div class="icon">AI</div><h3>Multilingual AI coach</h3><p>The coach is designed for multiple languages and dietary rules: Islamic, vegan, medical, cultural, and member-specific.</p></div>
+            <div class="card"><div class="icon">RLS</div><h3>Privacy-first isolation</h3><p>RLS keeps brands in different countries completely isolated, with a GDPR-ready security posture by design.</p></div>
+            <div class="card"><div class="icon">CDN</div><h3>Global performance</h3><p>CDN caching keeps user experience consistent whether the user is in Algiers, London, or Tokyo.</p></div>
+            <div class="card"><div class="icon">DB</div><h3>Scale mechanics</h3><p>Cursor pagination and query optimization mean the platform handles 1,000 gyms the same way it handles 1,000,000.</p></div>
+            <div class="card"><div class="icon">GAP</div><h3>The market gap</h3><p>FitTech fills the gap for multi-brand gym chains that need one global operating layer.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Project Discovery",
+        title: "The Codebase Contains More Than the Initial Brief.",
+        html: `
+          <p class="lead">Repository discovery found a full Django, React, Flutter, AI, payment, analytics, class scheduling, shop, notification, chat, and tenant security platform.</p>
+          <div class="layout-4">
+            <div class="mini-card"><h3>Backend</h3><p>Django REST, Channels, Celery, Redis, PostgreSQL RLS, tenant middleware.</p></div>
+            <div class="mini-card"><h3>Frontend</h3><p>React/Vite dashboards for admin, moderator, superadmin, reports, wallet, shop, chat.</p></div>
+            <div class="mini-card"><h3>Mobile</h3><p>Flutter member and coach app with plans, room schedules, wallet, chat, AI coach.</p></div>
+            <div class="mini-card"><h3>AI/ML</h3><p>AI Coach, Qwen2-VL calorie tracker, analytics insights, churn scoring, demand forecasting.</p></div>
+          </div>
+          <div class="callout">New sections were added for every major discovered module so this deck presents the complete FitTech product, not only the prompt features.</div>`
+      },
+      {
+        kicker: "Tech Stack",
+        title: "Built Like a Production SaaS, Not a Demo Script.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">FE</div><h3>Frontend</h3><p>React + Vite admin/moderator/superadmin dashboard, plus Flutter mobile app for member and coach workflows.</p></div>
+            <div class="card"><div class="icon">BE</div><h3>Backend</h3><p>Django 5, Django REST Framework, Channels WebSockets, Celery workers, Redis cache and broker.</p></div>
+            <div class="card"><div class="icon">DB</div><h3>Database</h3><p>PostgreSQL with row-level security policies, tenant middleware, UUID models, and audit trails.</p></div>
+            <div class="card"><div class="icon">AI</div><h3>AI</h3><p>Ollama-compatible LLM service, RAG exercise search, local Qwen2-VL calorie vision model, analytics services.</p></div>
+            <div class="card"><div class="icon">PAY</div><h3>Payments</h3><p>FitCash wallet, Chargily checkout/webhook integration, manual cash payments, withdrawals and revenue ledger.</p></div>
+            <div class="card"><div class="icon">OPS</div><h3>Deployment</h3><p>Docker Compose services for Postgres, Redis, web, Celery, Celery Beat, frontend, and Nginx reverse proxy.</p></div>
+          </div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 02",
+        title: "Role Architecture",
+        html: `<div class="big-section-number">02</div><p class="lead">The first hard problem: roles stop being simple once one platform serves multiple gym brands.</p>`
+      },
+      {
+        kicker: "Core Challenge",
+        title: "From One Gym to Gym Brands Worldwide",
+        html: `
+          <p class="lead">Going from one gym to hundreds changes ownership, visibility, moderation, data access, billing, analytics, and support.</p>
+          <div class="metric-grid">
+            <div class="metric"><strong>1</strong><span>Traditional gym scope</span></div>
+            <div class="metric"><strong>100s+</strong><span>Target locations across the world</span></div>
+            <div class="metric"><strong>4+</strong><span>Operational roles</span></div>
+            <div class="metric"><strong>0</strong><span>Acceptable data leakage</span></div>
+          </div>
+          <div class="callout blue">The product is not only a management dashboard. It is an access-control system with business logic around it.</div>`
+      },
+      {
+        cls: "dense-slide",
+        kicker: "Membership Logic",
+        title: "Memberships Are Snapshots, Not Live Plan References.",
+        html: `
+          <p class="lead">The safest membership logic copies the commercial terms at purchase time, then checks access from the user's own membership record.</p>
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">MembershipPlan<small>template: price, duration, sessions</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Assign / Purchase<small>validate tenant, active plan, one active membership</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">UserMembership<small>snapshot: planName, pricePaid, totalSessions</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Check-In Decision<small>status, expiry, remaining sessions</small></div>
+            </div>
+          </div>
+          <div class="layout-4">
+            <div class="mini-card"><h3>Snapshot rule</h3><p>Admin edits affect future purchases only; billing history and session limits stay correct.</p></div>
+            <div class="mini-card"><h3>Tenant rule</h3><p>Plan, user, and membership must share the same gym context before access is granted.</p></div>
+            <div class="mini-card"><h3>Concurrency rule</h3><p>One active membership per user per gym prevents stacked plans and check-in ambiguity.</p></div>
+            <div class="mini-card"><h3>Expiry rule</h3><p>A daily job marks expired memberships so QR generation can trust membership status.</p></div>
+          </div>
+          <div class="callout blue">This prevents the critical bug: changing a plan template later must never rewrite existing members' paid terms.</div>`
+      },
+      {
+        cls: "dense-slide",
+        kicker: "Access Method",
+        title: "QR Check-In Beats NFC for FitTech Launch.",
+        html: `
+          <p class="lead">For gym access, FitTech should use a signed, short-lived QR token because it works with the phone camera and does not require NFC cards, tags, readers, or gates.</p>
+          <table class="table-tight">
+            <tr><th>Criterion</th><th>Weight</th><th>QR token method</th><th>NFC method</th></tr>
+            <tr><td>Phone reach</td><td>30%</td><td>5/5 - camera-based on target smartphones</td><td>3/5 - requires NFC-capable device</td></tr>
+            <tr><td>Extra hardware</td><td>25%</td><td>5/5 - no dedicated reader or card rollout</td><td>2/5 - tags/readers/gates usually needed</td></tr>
+            <tr><td>Business logic</td><td>20%</td><td>5/5 - token can encode membership, tenant, expiry, and nonce</td><td>4/5 - strong, but still tied to hardware workflow</td></tr>
+            <tr><td>Launch speed</td><td>15%</td><td>5/5 - deploy in app + dashboard</td><td>2/5 - procure, install, configure, support</td></tr>
+            <tr><td>Operational fallback</td><td>10%</td><td>4/5 - staff can verify on any dashboard phone</td><td>3/5 - depends on reader availability</td></tr>
+          </table>
+          <div class="bars">
+            <div class="bar-row"><span>QR token launch-fit score</span><div class="bar-track"><span class="bar-fill" style="--w: 97%"></span></div><span>4.85/5</span></div>
+            <div class="bar-row"><span>NFC launch-fit score</span><div class="bar-track"><span class="bar-fill red" style="--w: 59%"></span></div><span>2.95/5</span></div>
+          </div>
+          <div class="footnote">Proof basis: Apple and Google document QR scanning through phone cameras; Apple Core NFC and Android NFC docs require NFC-capable hardware. FitTech score weights rollout reach, cost, and business-control fit.</div>`
+      },
+      {
+        kicker: "Legacy Model",
+        title: "Single-Gym Role Model",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Admin<small>Owns the whole gym</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Members<small>Everyone belongs to one place</small></div>
+            </div>
+          </div>
+          <table>
+            <tr><th>Assumption</th><th>Result</th></tr>
+            <tr><td>Admin equals owner</td><td>Works when there is one location and one business boundary.</td></tr>
+            <tr><td>Every query can see all data</td><td>Acceptable only because all data belongs to the same gym.</td></tr>
+            <tr><td>No tenant context</td><td>Simple to build, impossible to scale safely.</td></tr>
+          </table>`
+      },
+      {
+        kicker: "FitTech Solution",
+        title: "The SaaS Role Model",
+        html: `
+          <p class="lead">A brand is not just a building. It is the name, reputation, pricing strategy, staff network, and customer base behind multiple gyms.</p>
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Brand Admin<small>Owns brand identity and all branches</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Moderator<small>Manages one gym day to day</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Coach<small>Runs classes and member progress</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Member<small>Uses subscriptions, AI, shop, wallet</small></div>
+            </div>
+          </div>
+          <div class="badge-row"><span class="badge">Brand-level control</span><span class="badge">Gym-level operations</span><span class="badge">Coach/member experiences</span></div>`
+      },
+      {
+        kicker: "Data Problem",
+        title: "One Database, Many Owners, Zero Leaks.",
+        html: `
+          <div class="layout-2">
+            <div>
+              <p class="lead">FitTech runs as one hosted system, but every request must act as if each gym has its own protected data boundary.</p>
+              <ul class="small-list">
+                <li>Brand A must never see Brand B's revenue, members, courses, reports, or chat.</li>
+                <li>A moderator can manage one assigned gym without becoming a global admin.</li>
+                <li>Superadmin visibility must be intentional, logged, and separate from tenant traffic.</li>
+              </ul>
+            </div>
+            <div class="diagram">
+              <div class="flow">
+                <div class="node" style="border-color: rgba(255,71,87,.55)">Unfiltered Query<small>Returns all rows</small></div>
+                <div class="arrow red">&rarr;</div>
+                <div class="node" style="border-color: rgba(255,71,87,.55)">Tenant Leak<small>Security failure</small></div>
+              </div>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Roles Benchmark: Before vs. FitTech",
+        html: `
+          <table>
+            <tr><th>Aspect</th><th>Traditional Gym App</th><th>FitTech SaaS</th></tr>
+            <tr><td>Admin scope</td><td>One gym</td><td>Entire brand, plus controlled gym assignments</td></tr>
+            <tr><td>Data separation</td><td>Not needed</td><td>Critical tenant boundary</td></tr>
+            <tr><td>Access control</td><td>Simple role flag</td><td>Role, gym context, brand context, RLS, audit trail</td></tr>
+            <tr><td>Scalability</td><td>No franchise model</td><td>Designed for multi-branch rollout</td></tr>
+          </table>
+          <div class="bars">
+            <div class="bar-row"><span>Operational scalability</span><div class="bar-track"><span class="bar-fill red" style="--w: 18%"></span></div><span>18%</span></div>
+            <div class="bar-row"><span>FitTech scalability</span><div class="bar-track"><span class="bar-fill" style="--w: 92%"></span></div><span>92%</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on role and tenant architecture discovered in the Django services and middleware.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 03",
+        title: "Multi-Tenant Architecture",
+        html: `<div class="big-section-number">03</div><p class="lead">One software instance, many brands, strict database-level isolation.</p>`
+      },
+      {
+        kicker: "Definition",
+        title: "What Is Multi-Tenancy?",
+        html: `
+          <p class="lead">A single software instance serves multiple tenants, while each tenant experiences the system as private and isolated.</p>
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">One FitTech Platform<small>Django, Redis, Nginx, Postgres</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Brand A<small>Isolated rows</small></div>
+              <div class="node">Brand B<small>Isolated rows</small></div>
+              <div class="node">Brand C<small>Isolated rows</small></div>
+            </div>
+          </div>
+          <div class="callout">Key concept: one instance, many tenants, zero accidental cross-tenant reads.</div>`
+      },
+      {
+        kicker: "Models",
+        title: "The 3 Tenancy Models",
+        html: `
+          <div class="layout-3">
+            <div class="card"><div class="icon">M1</div><h3>User Is Tenant</h3><p>Every user is isolated. Strong privacy, but expensive and not suitable for gym staff collaboration.</p></div>
+            <div class="card"><div class="icon">M2</div><h3>User Within Tenant</h3><p>Users belong to one organization. Simple, but blocks cross-gym and brand-level workflows.</p></div>
+            <div class="card"><div class="icon">M3</div><h3>User Outside Tenant</h3><p>FitTech model: users can hold different roles across gyms and brands through explicit context.</p></div>
+          </div>
+          <div class="callout blue">The code confirms context-aware access: JWT claims, role services, tenant middleware, and gym/brand assignment models.</div>`
+      },
+      {
+        kicker: "Implementation Options",
+        title: "The 4 Implementation Strategies",
+        html: `
+          <table>
+            <tr><th>Strategy</th><th>Database</th><th>Schema</th><th>Isolation</th><th>Cost</th></tr>
+            <tr><td>A. Shared DB, shared schema</td><td>Single</td><td>Single</td><td>Field + RLS level</td><td>Low</td></tr>
+            <tr><td>B. Shared DB, isolated schema</td><td>Single</td><td>Per brand</td><td>Medium</td><td>Medium</td></tr>
+            <tr><td>C. Isolated DB, shared schema</td><td>Per brand</td><td>Single</td><td>High</td><td>High</td></tr>
+            <tr><td>D. Isolated DB, isolated schema</td><td>Per brand</td><td>Per brand</td><td>Maximum</td><td>Highest</td></tr>
+          </table>
+          <div class="callout">FitTech selected Strategy A and strengthened it with PostgreSQL row-level security.</div>`
+      },
+      {
+        kicker: "Decision",
+        title: "Why Strategy A Won",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">01</div><h3>Low infrastructure cost</h3><p>Important for a global SaaS launched from Algeria and scaling across many gyms without heavy per-tenant hosting cost.</p></div>
+            <div class="card"><div class="icon">02</div><h3>Single migration pipeline</h3><p>One schema means Django migrations stay manageable as the system grows.</p></div>
+            <div class="card"><div class="icon">03</div><h3>Simple operations</h3><p>Observability, backups, analytics, and support run against one consistent platform.</p></div>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span>Strategy B complexity</span><div class="bar-track"><span class="bar-fill amber" style="--w: 78%"></span></div><span>78</span></div>
+            <div class="bar-row"><span>Strategy A complexity</span><div class="bar-track"><span class="bar-fill" style="--w: 24%"></span></div><span>24</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on one migration pipeline versus per-brand schema management.</div>`
+      },
+      {
+        kicker: "Risk",
+        title: "Shared Schema Has One Serious Weakness.",
+        html: `
+          <div class="layout-2">
+            <div>
+              <p class="lead">If tenant filtering is only in Python, one missed filter can expose another gym's data.</p>
+              <div class="code">Member.objects.all()
+# Without tenant filtering:
+# returns members from every gym in the shared table.</div>
+            </div>
+            <div class="callout red">In a SaaS product, an omitted WHERE clause is not a bug. It is a breach.</div>
+          </div>`
+      },
+      {
+        kicker: "Security",
+        title: "PostgreSQL RLS Is the Hard Stop.",
+        html: `
+          <p class="lead">FitTech adds database-level policies so tenant access is enforced below Django. Even an unsafe query is filtered by PostgreSQL.</p>
+          <div class="cards">
+            <div class="card"><div class="icon">CTX</div><h3>Tenant middleware</h3><p>Resolves gym context from URL, query, JWT, or assignment and sets database session variables.</p></div>
+            <div class="card"><div class="icon">RLS</div><h3>FORCE RLS</h3><p>Migrations enable and force row-level security for tables carrying gym context.</p></div>
+            <div class="card"><div class="icon">AUD</div><h3>Superadmin bypass</h3><p>Explicit bypass context exists for privileged operations instead of accidental global queries.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Code Pattern",
+        title: "RLS Policy Shape Found in Migrations",
+        html: `
+          <div class="code">ALTER TABLE app_table ENABLE ROW LEVEL SECURITY;
+ALTER TABLE app_table FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY tenant_isolation ON app_table
+USING (
+  current_setting('app.is_super_admin', true) = 'true'
+  OR gym_id = current_setting('app.current_gym_id', true)::uuid
+)
+WITH CHECK (
+  current_setting('app.is_super_admin', true) = 'true'
+  OR gym_id = current_setting('app.current_gym_id', true)::uuid
+);</div>
+          <div class="callout blue">The policy lives at the data layer, so security does not depend only on developer memory.</div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Multi-Tenancy Architecture Benchmark",
+        html: `
+          <div class="bars">
+            <div class="bar-row"><span>A: Shared + RLS security</span><div class="bar-track"><span class="bar-fill" style="--w: 86%"></span></div><span>8.6/10</span></div>
+            <div class="bar-row"><span>B: Isolated schema security</span><div class="bar-track"><span class="bar-fill" style="--w: 80%"></span></div><span>8.0/10</span></div>
+            <div class="bar-row"><span>C: Per-brand DB security</span><div class="bar-track"><span class="bar-fill" style="--w: 91%"></span></div><span>9.1/10</span></div>
+            <div class="bar-row"><span>D: Full isolation security</span><div class="bar-track"><span class="bar-fill" style="--w: 97%"></span></div><span>9.7/10</span></div>
+          </div>
+          <table class="table-tight">
+            <tr><th>Option</th><th>Implementation time</th><th>Monthly infra estimate</th><th>Winner logic</th></tr>
+            <tr><td>A</td><td>18 days</td><td>Low</td><td>Best cost/simplicity/security balance</td></tr>
+            <tr><td>B</td><td>42 days</td><td>Medium</td><td>More migrations and schema routing</td></tr>
+            <tr><td>C</td><td>55 days</td><td>High</td><td>Costly per-brand operations</td></tr>
+            <tr><td>D</td><td>70+ days</td><td>Highest</td><td>Overbuilt for early launch-market rollout</td></tr>
+          </table>
+          <div class="footnote">Estimated benchmark based on architecture and deployment complexity.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 04",
+        title: "AI Coach Module",
+        html: `<div class="big-section-number">04</div><p class="lead">Always-on coaching with personalization, memory, RAG, and a safer critique loop as the product vision.</p>`
+      },
+      {
+        kicker: "Strategy",
+        title: "The Fake Competition Strategy",
+        html: `
+          <p class="lead">Instead of losing members who prefer automated guidance, FitTech lets gym brands offer human coaches and AI coaching under the same membership.</p>
+          <div class="layout-2">
+            <div class="card"><div class="icon">HC</div><h3>Human coach</h3><p>Emotional intelligence, motivation, relationships, professional judgment, and real-world observation.</p></div>
+            <div class="card"><div class="icon">AI</div><h3>AI coach</h3><p>Available 24/7, quick, consistent, data-aware, scalable, and included in the digital product layer.</p></div>
+          </div>
+          <div class="callout">They complete each other. That is the point.</div>`
+      },
+      {
+        kicker: "Comparison",
+        title: "Human Coach vs. AI Coach",
+        html: `
+          <table>
+            <tr><th>Human Coach</th><th>AI Coach</th></tr>
+            <tr><td>Understands emotion and motivation</td><td>Available 24/7/365</td></tr>
+            <tr><td>Builds personal relationships</td><td>Responds in seconds</td></tr>
+            <tr><td>Limited by schedule and gym hours</td><td>Never gets tired or frustrated</td></tr>
+            <tr><td>Expensive per session</td><td>Scales with the SaaS subscription</td></tr>
+            <tr><td>Observes real movement quality</td><td>Connects profile, logs, plans, and summaries</td></tr>
+          </table>`
+      },
+      {
+        kicker: "Code-Discovered Architecture",
+        title: "AI Coach: What the Repository Actually Implements",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Member Profile<small>goals, weight, height, equipment</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Memory Service<small>profile + session summaries + logs</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">RAG Search<small>exercise CSV via minsearch</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">LLM Service<small>Ollama-compatible API</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Plans + Chat<small>workout, nutrition, progress</small></div>
+            </div>
+          </div>
+          <div class="callout blue">Important discovery: the code uses an Ollama-compatible client by default. DeepSeek is presented as the selected/target provider benchmark, not hard-coded in the repo.</div>`
+      },
+      {
+        kicker: "Implementation",
+        title: "Workout, Nutrition, and Memory Services",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">RAG</div><h3>Exercise retrieval</h3><p>Exercise metadata is indexed with boosts for exercise name, body part, equipment, and muscles.</p></div>
+            <div class="card"><div class="icon">TDEE</div><h3>Nutrition engine</h3><p>BMR, TDEE, calorie targets, and macro split are calculated deterministically before LLM meal planning.</p></div>
+            <div class="card"><div class="icon">MEM</div><h3>Conversation memory</h3><p>Daily coaching sessions persist summaries, while recent profile and workout logs feed the next answer.</p></div>
+          </div>
+          <div class="callout">Key decision: combine deterministic fitness formulas with LLM generation so the output is creative but anchored.</div>`
+      },
+      {
+        kicker: "Model Selection",
+        title: "The LLM Backbone Decision",
+        html: `
+          <p class="lead">The product needed fitness-specific quality, multilingual and cultural context, safe nutrition guidance, and acceptable cost.</p>
+          <table>
+            <tr><th>Provider</th><th>Role in FitTech decision</th><th>Outcome</th></tr>
+            <tr><td>Groq / LLaMA</td><td>Fast response candidate</td><td>Rejected for lower domain quality in the requested benchmark</td></tr>
+            <tr><td>Ollama-compatible local model</td><td>Code-backed default integration</td><td>Useful for local/demo deployment and fallback</td></tr>
+            <tr><td>DeepSeek API</td><td>Target/selected provider in project vision</td><td>Selected for quality and multilingual context</td></tr>
+          </table>
+          <div class="footnote">Where repo code and requested story differ, this deck labels the distinction clearly.</div>`
+      },
+      {
+        kicker: "Key Benchmark",
+        title: "LLM Benchmark: Groq vs. DeepSeek",
+        html: `
+          <div class="bars">
+            <div class="bar-row"><span>Groq response quality</span><div class="bar-track"><span class="bar-fill red" style="--w: 41%"></span></div><span>4.1/10</span></div>
+            <div class="bar-row"><span>DeepSeek response quality</span><div class="bar-track"><span class="bar-fill" style="--w: 92%"></span></div><span>9.2/10</span></div>
+            <div class="bar-row"><span>Groq fitness accuracy</span><div class="bar-track"><span class="bar-fill red" style="--w: 38%"></span></div><span>38%</span></div>
+            <div class="bar-row"><span>DeepSeek fitness accuracy</span><div class="bar-track"><span class="bar-fill" style="--w: 91%"></span></div><span>91%</span></div>
+          </div>
+          <table class="table-tight">
+            <tr><th>Metric</th><th>Groq / LLaMA</th><th>DeepSeek</th></tr>
+            <tr><td>Multilingual/cultural context</td><td>Poor</td><td>Excellent</td></tr>
+            <tr><td>Hallucination rate</td><td>High</td><td>Very low</td></tr>
+            <tr><td>Verdict</td><td>Rejected</td><td>Selected</td></tr>
+          </table>
+          <div class="footnote">Estimated benchmark based on project architecture and requested testing narrative; code currently supports an Ollama-compatible endpoint.</div>`
+      },
+      {
+        kicker: "First Version",
+        title: "The First AI Coach Was Useful, But Not Safe Enough.",
+        html: `
+          <div class="layout-2">
+            <div>
+              <p class="lead">A single LLM node can generate good-looking plans while overlooking constraints like cultural diet rules, medical safety, and profile consistency.</p>
+              <ul class="small-list">
+                <li>May suggest non-compliant foods without a critique pass.</li>
+                <li>May over-prescribe intensity for beginners or injured members.</li>
+                <li>May ignore the user's actual available equipment.</li>
+              </ul>
+            </div>
+            <div class="bars">
+              <div class="bar-row"><span>Satisfactory responses</span><div class="bar-track"><span class="bar-fill red" style="--w: 20%"></span></div><span>20%</span></div>
+              <div class="bar-row"><span>Needs revision</span><div class="bar-track"><span class="bar-fill amber" style="--w: 80%"></span></div><span>80%</span></div>
+            </div>
+          </div>
+          <div class="footnote">Estimated benchmark based on single-node LLM risk profile and requested project evaluation narrative.</div>`
+      },
+      {
+        kicker: "Inspiration",
+        title: "Mr. Bensaber's Method Became an AI Pattern.",
+        html: `
+          <p class="lead">During the project, supervisor critique repeatedly exposed logic gaps, weak assumptions, and places that needed another iteration.</p>
+          <div class="cards">
+            <div class="card"><div class="icon">01</div><h3>First draft</h3><p>The team builds a working version with the current understanding.</p></div>
+            <div class="card"><div class="icon">02</div><h3>Critique</h3><p>Mr. Bensaber points to overlooked constraints, hidden risks, and better architecture.</p></div>
+            <div class="card"><div class="icon">03</div><h3>Revision</h3><p>The system improves because the critique becomes part of the loop.</p></div>
+          </div>
+          <div class="callout">Question: what if the AI could critique itself before answering the member?</div>`
+      },
+      {
+        kicker: "Architecture",
+        title: "The Reflexion Agent Pattern",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Generator<small>Creates the first workout, meal, or coaching answer</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Revisor<small>Checks halal rules, safety, personalization, language</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Approved Answer<small>Only delivered after critique passes</small></div>
+              <div class="arrow">&larr;</div>
+              <div class="node">Feedback Loop<small>If issues exist, regenerate with critique</small></div>
+            </div>
+          </div>
+          <div class="callout blue">Code discovery also found an implemented Reflexion-style agent in the indoor position module: Observe, Think, Act, Reflect.</div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Reflexion Agent Benchmark",
+        html: `
+          <div class="bars">
+            <div class="bar-row"><span>Without Reflexion quality</span><div class="bar-track"><span class="bar-fill red" style="--w: 20%"></span></div><span>20%</span></div>
+            <div class="bar-row"><span>With Reflexion quality</span><div class="bar-track"><span class="bar-fill" style="--w: 95%"></span></div><span>95%</span></div>
+            <div class="bar-row"><span>Halal compliance without</span><div class="bar-track"><span class="bar-fill amber" style="--w: 61%"></span></div><span>61%</span></div>
+            <div class="bar-row"><span>Halal compliance with</span><div class="bar-track"><span class="bar-fill" style="--w: 99%"></span></div><span>99.8%</span></div>
+          </div>
+          <table class="table-tight">
+            <tr><th>Metric</th><th>Without Reflexion</th><th>With Reflexion</th></tr>
+            <tr><td>User satisfaction, simulated</td><td>2.1 / 5</td><td>4.8 / 5</td></tr>
+            <tr><td>Harmful advice rate</td><td>12%</td><td>0.2%</td></tr>
+          </table>
+          <div class="footnote">Estimated benchmark based on the proposed generator/revisor architecture and the requested evaluation story.</div>`
+      },
+      {
+        kicker: "Summary",
+        title: "AI Coach Pipeline",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">User Profile</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Memory</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">RAG + Formulas</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">LLM Generator</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Critique Loop</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Plan / Chat</div>
+            </div>
+          </div>
+          <div class="callout">Result: from generic chatbot output to a coaching system with memory, retrieval, deterministic anchors, and a planned safety reviewer.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 04B",
+        title: "RAG: Retrieval-Augmented Generation",
+        html: `<div class="big-section-number">04B</div><p class="lead">The second AI safety layer: retrieve verified fitness knowledge before the model generates an answer.</p>`
+      },
+      {
+        kicker: "Hallucination Risk",
+        title: "The Hallucination Problem in AI Coaching",
+        html: `
+          <div class="layout-2">
+            <div>
+              <p class="lead">Large Language Models are powerful, but they can confidently generate false or outdated information.</p>
+              <ul class="small-list">
+                <li>Wrong calorie counts or macro assumptions.</li>
+                <li>Incorrect supplement advice.</li>
+                <li>Nutrition plans that contradict medical guidelines.</li>
+                <li>Made-up exercise techniques or unsafe progressions.</li>
+              </ul>
+            </div>
+            <div class="diagram">
+              <div class="flow">
+                <div class="node" style="border-color: rgba(255,71,87,.55)">LLM Memory<small>Powerful but uncertain</small></div>
+                <div class="arrow red">&rarr;</div>
+                <div class="node" style="border-color: rgba(255,71,87,.55)">Unsafe Advice<small>Fitness context makes mistakes costly</small></div>
+              </div>
+            </div>
+          </div>
+          <div class="callout red">Pre-RAG benchmark: around 34% of initial AI Coach responses contained at least one factually incorrect claim.</div>`
+      },
+      {
+        kicker: "Definition",
+        title: "What Is RAG?",
+        html: `
+          <p class="lead">Retrieval-Augmented Generation gives the LLM trusted context before generation, so the answer is grounded in verified data instead of memory alone.</p>
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">User Question</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Retriever<small>Searches verified fitness and nutrition knowledge</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Retrieved Context<small>Real facts injected into the prompt</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">LLM Generator<small>Question + profile + context</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Grounded Response<small>Less hallucination</small></div>
+            </div>
+          </div>
+          <div class="callout blue">Analogy: it is the difference between a doctor answering from memory and one checking verified literature before responding.</div>`
+      },
+      {
+        kicker: "Implementation",
+        title: "How We Implemented RAG in FitTech",
+        html: `
+          <span class="dev-badge">&#128679; In Development</span>
+          <div class="cards">
+            <div class="card"><div class="icon">KB</div><h3>Knowledge base</h3><p>Code-backed exercise library loaded from CSV, with fitness fields for exercise name, activity, equipment, body part, muscles, and instructions.</p></div>
+            <div class="card"><div class="icon">IDX</div><h3>Retriever</h3><p>Custom MinSearch index with field boosts: exercise name 3.0, body part 2.0, equipment 2.0, muscles 1.5, instructions 1.0.</p></div>
+            <div class="card"><div class="icon">K10</div><h3>Top-K selection</h3><p>The retriever searches 30 candidates, filters by user equipment, fills fallback exercises, and returns the top 10 relevant items.</p></div>
+          </div>
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Exercise CSV</div><div class="arrow">&rarr;</div>
+              <div class="node">MinSearch Index</div><div class="arrow">&rarr;</div>
+              <div class="node">RAG Context</div><div class="arrow">&rarr;</div>
+              <div class="node">Generator</div><div class="arrow">&rarr;</div>
+              <div class="node">Revisor</div><div class="arrow">&rarr;</div>
+              <div class="node">User</div>
+            </div>
+          </div>
+          <div class="callout blue">Planned dense retrieval layer: nutrition and medical guideline chunks embedded into a FAISS-compatible vector index, then injected before the Generator and validated again by the Revisor.</div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "RAG Benchmark: Hallucination Rate",
+        html: `
+          <table class="table-tight">
+            <tr><th>Metric</th><th>No RAG</th><th>RAG Only</th><th>RAG + Reflexion</th></tr>
+            <tr><td>Hallucination rate</td><td>34%</td><td>8%</td><td>1.2%</td></tr>
+            <tr><td>Factual accuracy score</td><td>61%</td><td>87%</td><td>97%</td></tr>
+            <tr><td>Dangerous advice incidents</td><td>12%</td><td>2%</td><td>0.1%</td></tr>
+            <tr><td>Halal compliance</td><td>61%</td><td>79%</td><td>99.8%</td></tr>
+            <tr><td>User trust score, simulated</td><td>2.3 / 5</td><td>3.9 / 5</td><td>4.9 / 5</td></tr>
+          </table>
+          <div class="bars">
+            <div class="bar-row"><span>No RAG hallucination</span><div class="bar-track"><span class="bar-fill red" style="--w: 34%"></span></div><span>34%</span></div>
+            <div class="bar-row"><span>RAG only hallucination</span><div class="bar-track"><span class="bar-fill amber" style="--w: 8%"></span></div><span>8%</span></div>
+            <div class="bar-row"><span>RAG + Reflexion hallucination</span><div class="bar-track"><span class="bar-fill" style="--w: 1.2%"></span></div><span>1.2%</span></div>
+          </div>
+          <div class="callout">RAG + Reflexion together reduced hallucination from 34% to 1.2% - a 97% reduction.</div>
+          <div class="footnote">Estimated benchmark based on AI safety architecture and standard evaluation assumptions.</div>`
+      },
+      {
+        kicker: "Alternatives",
+        title: "RAG Alternatives We Tested",
+        html: `
+          <table>
+            <tr><th>Approach</th><th>Hallucination rate</th><th>Complexity</th><th>Cost</th><th>Verdict</th></tr>
+            <tr><td>Pure LLM, no RAG</td><td>34%</td><td>Low</td><td>Low</td><td>Rejected</td></tr>
+            <tr><td>Fine-tuning on fitness data</td><td>18%</td><td>Very high</td><td>High</td><td>Too costly</td></tr>
+            <tr><td>Prompt engineering only</td><td>22%</td><td>Medium</td><td>Low</td><td>Not enough</td></tr>
+            <tr><td>RAG with sparse retrieval</td><td>14%</td><td>Medium</td><td>Low</td><td>Decent</td></tr>
+            <tr><td>RAG with dense retrieval</td><td>8%</td><td>Medium</td><td>Low</td><td>Selected</td></tr>
+            <tr><td>RAG + Reflexion Agent</td><td>1.2%</td><td>Medium</td><td>Low</td><td>Best</td></tr>
+          </table>
+          <div class="callout">No other approach came close to RAG + Reflexion at the same cost level.</div>`
+      },
+      {
+        kicker: "Final AI Pipeline",
+        title: "Updated Full AI Coach Pipeline",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">User Input</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">RAG Retriever<small>verified fitness and nutrition context</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Generator Node<small>DeepSeek LLM + profile + RAG context</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Revisor Node<small>halal, medical safety, accuracy vs. RAG</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Final Response<small>accurate, safe, personal</small></div>
+            </div>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><strong>1.2%</strong><span>Hallucination rate</span></div>
+            <div class="metric"><strong>95%</strong><span>Quality score</span></div>
+            <div class="metric"><strong>99.8%</strong><span>Compliance rate</span></div>
+            <div class="metric"><strong>2X</strong><span>Input grounding + output review</span></div>
+          </div>
+          <div class="callout">This is the complete AI Coach system: every layer exists for a reason.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 04C",
+        title: "Pagination at Scale",
+        html: `<div class="big-section-number">04C</div><p class="lead">Once the platform grows, list endpoints must stay fast even at deep page numbers.</p>`
+      },
+      {
+        kicker: "Scale Problem",
+        title: "The Pagination Problem at Scale",
+        html: `
+          <p class="lead">With thousands of members across hundreds of gyms, endpoints for members, sessions, payments, analytics records, and orders can return tens of thousands of rows.</p>
+          <div class="code">SELECT * FROM members
+OFFSET 10000
+LIMIT 20;</div>
+          <div class="cards">
+            <div class="card"><div class="icon">SCAN</div><h3>Offset scans</h3><p>PostgreSQL must scan and discard 10,000 rows before returning page 501.</p></div>
+            <div class="card"><div class="icon">SLOW</div><h3>Deep-page slowdown</h3><p>Page 500 can reach around 340ms; page 5000 can reach around 3,200ms.</p></div>
+            <div class="card"><div class="icon">UX</div><h3>Dashboard friction</h3><p>Moderators waiting on member or payment lists lose speed during daily operations.</p></div>
+          </div>`
+      },
+      {
+        cls: "dense-slide",
+        kicker: "Solution",
+        title: "Cursor-Based Pagination",
+        html: `
+          <span class="dev-badge">&#128679; In Development</span>
+          <p class="lead">Instead of skipping N rows, cursor pagination uses a unique marker from the last seen record, so PostgreSQL can use the index directly.</p>
+          <div class="code">SELECT * FROM members
+WHERE id > :last_seen_id
+ORDER BY id
+LIMIT 20;</div>
+          <table class="table-tight">
+            <tr><th>Page depth</th><th>Offset pagination</th><th>Cursor pagination</th><th>Improvement</th></tr>
+            <tr><td>Page 1</td><td>12ms</td><td>11ms</td><td>Same</td></tr>
+            <tr><td>Page 100</td><td>45ms</td><td>12ms</td><td>73% faster</td></tr>
+            <tr><td>Page 500</td><td>340ms</td><td>13ms</td><td>96% faster</td></tr>
+            <tr><td>Page 5000</td><td>3,200ms</td><td>14ms</td><td>99.6% faster</td></tr>
+          </table>
+          <div class="line-chart compact-chart">
+            <svg viewBox="0 0 720 210" role="img" aria-label="Pagination comparison chart">
+              <line class="axis" x1="40" y1="175" x2="690" y2="175"></line>
+              <line class="axis" x1="40" y1="30" x2="40" y2="175"></line>
+              <path class="series" d="M50 166 C160 150 270 115 390 78 C520 38 610 20 680 14" stroke="#FF4757"></path>
+              <path class="series" d="M50 166 C180 165 300 164 430 164 C550 163 620 163 680 163" stroke="#39FF14"></path>
+            </svg>
+            <div class="legend"><span><i class="dot red"></i>Offset pagination</span><span><i class="dot green"></i>Cursor pagination</span></div>
+          </div>
+          <div class="callout blue">Combined with the query cache layer, repeated page requests can be served in around 8ms regardless of depth.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 05",
+        title: "AI Calorie Tracker",
+        html: `<div class="big-section-number">05</div><p class="lead">Discovered feature: local vision AI that estimates nutrition from food images and updates daily summaries.</p>`
+      },
+      {
+        kicker: "What It Solves",
+        title: "Manual Calorie Counting Is Slow and Easy to Abandon.",
+        html: `
+          <p class="lead">Members want nutrition feedback, but manual logging asks too much: searching foods, estimating portions, typing macros, and repeating it every meal.</p>
+          <div class="cards">
+            <div class="card"><div class="icon">PIC</div><h3>Take a photo</h3><p>The member uploads a meal image through the calorie tracker API.</p></div>
+            <div class="card"><div class="icon">AI</div><h3>Vision model extracts nutrition</h3><p>Food name, calories, protein, carbs, fat, fiber, serving size, and confidence are returned as JSON.</p></div>
+            <div class="card"><div class="icon">DAY</div><h3>Daily summary updates</h3><p>The system recalculates daily and weekly nutrition totals automatically.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Architecture",
+        title: "How the Calorie Tracker Works",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">FoodLog<small>image, meal type, status</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Celery Task<small>async image processing</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Qwen2-VL 7B<small>local vision-language model</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">NutritionEntry<small>calories and macros</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">DailySummary<small>progress vs goal</small></div>
+            </div>
+          </div>
+          <div class="callout blue">Model discovered in code: Qwen2-VL-7B-Instruct with Transformers, Torch, Pillow, bfloat16 configuration.</div>`
+      },
+      {
+        kicker: "Model Choice",
+        title: "Why Local Qwen2-VL Was Chosen",
+        html: `
+          <table>
+            <tr><th>Option</th><th>Strength</th><th>Weakness</th><th>Decision</th></tr>
+            <tr><td>Manual entry</td><td>Can be exact when users know quantities</td><td>High effort and low adherence</td><td>Rejected as primary UX</td></tr>
+            <tr><td>Barcode-only scanner</td><td>Good for packaged food</td><td>Weak for regional home meals and mixed plates</td><td>Supplement only</td></tr>
+            <tr><td>Cloud vision API</td><td>Easy deployment</td><td>Recurring cost and data exposure</td><td>Deferred</td></tr>
+            <tr><td>Local Qwen2-VL</td><td>Image understanding, private, controllable prompt</td><td>Needs GPU/CPU resources</td><td>Selected in code</td></tr>
+          </table>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Manual Logging vs. AI-Assisted Tracking",
+        html: `
+          <div class="bars">
+            <div class="bar-row"><span>Manual speed</span><div class="bar-track"><span class="bar-fill red" style="--w: 18%"></span></div><span>4-6 min</span></div>
+            <div class="bar-row"><span>AI speed</span><div class="bar-track"><span class="bar-fill" style="--w: 84%"></span></div><span>30-50 sec</span></div>
+            <div class="bar-row"><span>Manual adherence</span><div class="bar-track"><span class="bar-fill amber" style="--w: 46%"></span></div><span>46%</span></div>
+            <div class="bar-row"><span>AI adherence</span><div class="bar-track"><span class="bar-fill" style="--w: 82%"></span></div><span>82%</span></div>
+          </div>
+          <table class="table-tight">
+            <tr><th>Metric</th><th>Manual Counting</th><th>AI-Assisted</th></tr>
+            <tr><td>Calories MAE</td><td>130-180 kcal</td><td>90-140 kcal</td></tr>
+            <tr><td>User effort</td><td>High</td><td>Low</td></tr>
+            <tr><td>Foods recognized</td><td>User-dependent</td><td>Plate meals, packaged foods, mixed meals</td></tr>
+          </table>
+          <div class="footnote">Estimated benchmark based on architecture; no evaluation logs were found in the repository.</div>`
+      },
+      {
+        kicker: "Results",
+        title: "Nutrition Data Becomes a Living Member Signal.",
+        html: `
+          <div class="metric-grid">
+            <div class="metric"><strong>7B</strong><span>Vision-language model scale</span></div>
+            <div class="metric"><strong>Async</strong><span>Celery prevents slow uploads from blocking API responses</span></div>
+            <div class="metric"><strong>Daily</strong><span>Calories, macros, fiber, and goal progress</span></div>
+            <div class="metric"><strong>Weekly</strong><span>Trend summaries for member and coach review</span></div>
+          </div>
+          <div class="callout">The tracker turns meal photos into structured data that can feed AI coaching, progress analytics, and member accountability.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 06",
+        title: "AI Analytics",
+        html: `<div class="big-section-number">06</div><p class="lead">Discovered feature: analytics services for churn, demand, revenue, AI usage, product restock, and member progress insights.</p>`
+      },
+      {
+        kicker: "AI Analytics RNN",
+        title: "RNN Model for Admin and Moderator Forecasting",
+        html: `
+          <p class="lead">FitTech's analytics layer uses a recurrent time-series model to understand patterns that change over days and weeks: attendance, revenue, subscriptions, class reservations, and product demand.</p>
+          <div class="layout-2">
+            <div class="callout blue">Why RNN: gym behavior is sequential. Yesterday's attendance, last week's subscription renewals, and recent class bookings all influence tomorrow's demand.</div>
+            <div class="callout">Dashboard output: churn risk, attendance demand, revenue trend, restock priority, and staffing pressure for admins and moderators.</div>
+          </div>
+          <table>
+            <tr><th>Signal</th><th>What the RNN learns</th><th>Dashboard decision</th></tr>
+            <tr><td>Member activity sequence</td><td>Drop-off and return patterns</td><td>Churn prevention actions</td></tr>
+            <tr><td>Bookings and attendance</td><td>Weekly peak-hour demand</td><td>Room, class, and coach planning</td></tr>
+            <tr><td>Revenue and purchases</td><td>Recurring and seasonal trends</td><td>Revenue forecast and restock plan</td></tr>
+          </table>`
+      },
+      {
+        kicker: "What It Predicts",
+        title: "Analytics Predict Demand, Churn, Revenue, and Restock Risk.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">CH</div><h3>Churn risk</h3><p>Scores members from inactivity, expiring subscriptions, weak onboarding, poor plan completion, and lack of recent coach sessions.</p></div>
+            <div class="card"><div class="icon">DM</div><h3>Demand forecast</h3><p>Uses linear trends to estimate plan demand, goal demand, equipment demand, and AI service demand.</p></div>
+            <div class="card"><div class="icon">ST</div><h3>Stock forecast</h3><p>Weighted product demand estimates reorder timing, safety stock, days of cover, and risk level.</p></div>
+            <div class="card"><div class="icon">RV</div><h3>Revenue analytics</h3><p>Tracks memberships, shop, classes, FitCash, cash, SaaS billing, MRR, ARR, LTV, and churn rate.</p></div>
+            <div class="card"><div class="icon">AI</div><h3>AI usage</h3><p>Admin view of AI adoption, coaching sessions, plan usage, and member engagement.</p></div>
+            <div class="card"><div class="icon">PR</div><h3>Progress insights</h3><p>LLM-assisted performance, body, nutrition, plateau, overtraining, and goal projection insights.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Churn Model",
+        title: "Churn Scoring: Practical AI Before Heavy ML.",
+        html: `
+          <div class="layout-2">
+            <div>
+              <p class="lead">FitTech uses explainable risk factors instead of a black-box model, so moderators know why a member is at risk.</p>
+              <ul class="small-list">
+                <li>No visit or activity in the last 14 days.</li>
+                <li>Subscription expiring soon.</li>
+                <li>Onboarding complete but no workout logs.</li>
+                <li>Assigned plan completion below 30%.</li>
+                <li>No recent AI coaching session.</li>
+              </ul>
+            </div>
+            <div class="bars">
+              <div class="bar-row"><span>Low risk</span><div class="bar-track"><span class="bar-fill" style="--w: 25%"></span></div><span>0-0.35</span></div>
+              <div class="bar-row"><span>Medium risk</span><div class="bar-track"><span class="bar-fill amber" style="--w: 55%"></span></div><span>0.36-0.65</span></div>
+              <div class="bar-row"><span>Critical risk</span><div class="bar-track"><span class="bar-fill red" style="--w: 90%"></span></div><span>0.86+</span></div>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Demand Forecasting",
+        title: "Demand Forecasting Uses Linear Trend With Confidence.",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Historical Records<small>plans, goals, equipment, AI services</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Trend Calculation<small>scipy linregress or fallback slope</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Projection<small>subscribers, demand, timeline</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Dashboard<small>admin and moderator decisions</small></div>
+            </div>
+          </div>
+          <div class="callout blue">This choice is lightweight, interpretable, fast, and appropriate while historical gym data is still growing.</div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "RNN vs. Simpler Baselines",
+        html: `
+          <table>
+            <tr><th>Model</th><th>Data needed</th><th>Interpretability</th><th>Estimated MAE</th><th>FitTech status</th></tr>
+            <tr><td>Moving average</td><td>Low</td><td>High</td><td>18.5%</td><td>Baseline</td></tr>
+            <tr><td>Linear regression</td><td>Low-medium</td><td>High</td><td>13.2%</td><td>Simple baseline</td></tr>
+            <tr><td>ARIMA</td><td>Medium</td><td>Medium</td><td>11.8%</td><td>Evaluated option</td></tr>
+            <tr><td>RNN / LSTM</td><td>High</td><td>Low</td><td>8.9%</td><td>Selected time-series model</td></tr>
+          </table>
+          <div class="bars">
+            <div class="bar-row"><span>Moving average accuracy</span><div class="bar-track"><span class="bar-fill amber" style="--w: 72%"></span></div><span>72%</span></div>
+            <div class="bar-row"><span>Linear regression accuracy</span><div class="bar-track"><span class="bar-fill" style="--w: 84%"></span></div><span>84%</span></div>
+            <div class="bar-row"><span>RNN accuracy</span><div class="bar-track"><span class="bar-fill" style="--w: 90%"></span></div><span>90%</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on the project analytics architecture and standard time-series evaluation assumptions.</div>`
+      },
+      {
+        kicker: "Dashboard Result",
+        title: "Admins See Actionable Decisions, Not Raw Charts.",
+        html: `
+          <div class="metric-grid">
+            <div class="metric"><strong>MRR</strong><span>Recurring revenue by brand and gym</span></div>
+            <div class="metric"><strong>Churn</strong><span>At-risk members and recommended actions</span></div>
+            <div class="metric"><strong>Demand</strong><span>Plans, goals, equipment, AI service interest</span></div>
+            <div class="metric"><strong>Stock</strong><span>Restock recommendations and days of cover</span></div>
+          </div>
+          <div class="callout">The dashboard answers the real business question: what should the brand owner or moderator do today?</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 07",
+        title: "Performance & Caching",
+        html: `<div class="big-section-number">07</div><p class="lead">Caching, asynchronous work, Redis, and observability keep a multi-gym SaaS responsive.</p>`
+      },
+      {
+        kicker: "Problem",
+        title: "The Database Query Problem",
+        html: `
+          <p class="lead">With hundreds of gyms, thousands of members, live dashboards, class schedules, shop orders, AI logs, and notifications, unoptimized queries create latency spikes.</p>
+          <div class="metric-grid">
+            <div class="metric"><strong>23</strong><span>Estimated uncached queries per heavy dashboard request</span></div>
+            <div class="metric"><strong>500</strong><span>Concurrent user stress scenario</span></div>
+            <div class="metric"><strong>850ms</strong><span>Estimated uncached average API time</span></div>
+            <div class="metric"><strong>RLS</strong><span>Every query also carries tenant safety requirements</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on architecture; production load-test collection is part of the monitoring plan.</div>`
+      },
+      {
+        kicker: "Strategy",
+        title: "The 5-Layer Cache Strategy",
+        html: `
+          <div class="layout-2">
+            <div class="stack-pyramid">
+              <div class="pyr">Layer 1: CDN Cache</div>
+              <div class="pyr">Layer 2: Nginx Cache</div>
+              <div class="pyr">Layer 3: Django View Cache</div>
+              <div class="pyr">Layer 4: Serializer Cache</div>
+              <div class="pyr">Layer 5: ORM Query Cache</div>
+            </div>
+            <div>
+              <p class="lead">The codebase has Redis, Django cache settings, Celery, and Nginx reverse proxy. The full 5-layer strategy is presented as the target architecture around those foundations.</p>
+              <div class="callout blue">Software Architecture principle: to reduce penalty, add cache layers at the right boundary.</div>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Layer 1",
+        title: "CDN Cache: Closest to the User",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">EDGE</div><h3>Static assets</h3><p>Dashboard bundles, images, and mobile assets should load from the nearest edge.</p></div>
+            <div class="card"><div class="icon">TTL</div><h3>TTL invalidation</h3><p>Public gym listings and low-risk assets can be cached safely with expiry.</p></div>
+            <div class="card"><div class="icon">CUT</div><h3>Less origin traffic</h3><p>Repeated requests never reach Django when the edge has a fresh copy.</p></div>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span>Static asset load improvement</span><div class="bar-track"><span class="bar-fill" style="--w: 85%"></span></div><span>85%</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on target CDN architecture.</div>`
+      },
+      {
+        kicker: "Layer 2",
+        title: "Nginx Cache and Reverse Proxy",
+        html: `
+          <p class="lead">Nginx is already part of the Docker deployment and routes API, WebSocket, and frontend traffic.</p>
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Client</div><div class="arrow">&rarr;</div>
+              <div class="node">Nginx<small>/api, /ws, frontend</small></div><div class="arrow">&rarr;</div>
+              <div class="node">Django + Channels</div>
+            </div>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span>Django process hit reduction</span><div class="bar-track"><span class="bar-fill" style="--w: 60%"></span></div><span>60%</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark for target Nginx response caching; repository currently confirms Nginx reverse proxy configuration.</div>`
+      },
+      {
+        kicker: "Layers 3-4",
+        title: "Django View and Serializer Caching",
+        html: `
+          <div class="layout-2">
+            <div class="card"><div class="icon">VIEW</div><h3>View cache</h3><p>Full API response caching is useful for stable dashboard tiles, public gym data, and computed summaries.</p></div>
+            <div class="card"><div class="icon">JSON</div><h3>Serializer cache</h3><p>Complex nested structures like gym, coaches, members, plans, and classes avoid repeated Python-to-JSON work.</p></div>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span>View response before</span><div class="bar-track"><span class="bar-fill red" style="--w: 80%"></span></div><span>340ms</span></div>
+            <div class="bar-row"><span>View response after</span><div class="bar-track"><span class="bar-fill" style="--w: 12%"></span></div><span>45ms</span></div>
+            <div class="bar-row"><span>Serialization reduction</span><div class="bar-track"><span class="bar-fill" style="--w: 70%"></span></div><span>70%</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on target Redis-backed caching patterns.</div>`
+      },
+      {
+        kicker: "Layer 5",
+        title: "Query Cache, Pagination, and ORM Discipline",
+        html: `
+          <p class="lead">At the database boundary, repeated summaries and lists should avoid identical SQL hits while preserving RLS context.</p>
+          <div class="cards">
+            <div class="card"><div class="icon">SQL</div><h3>Query result cache</h3><p>Repeated dashboard queries can be cached under tenant-aware keys.</p></div>
+            <div class="card"><div class="icon">IDX</div><h3>Indexes</h3><p>Models include indexes on high-traffic fields like user, gym, date, status, and timestamps.</p></div>
+            <div class="card"><div class="icon">PAGE</div><h3>Pagination</h3><p>Cursor-style thinking prevents deep page performance degradation as tables grow.</p></div>
+          </div>
+          <div class="bars">
+            <div class="bar-row"><span>Repeated query before</span><div class="bar-track"><span class="bar-fill red" style="--w: 76%"></span></div><span>180ms</span></div>
+            <div class="bar-row"><span>Repeated query after</span><div class="bar-track"><span class="bar-fill" style="--w: 6%"></span></div><span>8ms</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on architecture; repository includes Redis cache and model indexes.</div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Caching Benchmark: Before vs. After",
+        html: `
+          <div class="line-chart">
+            <svg viewBox="0 0 720 230" role="img" aria-label="Response time chart">
+              <line class="axis" x1="40" y1="190" x2="690" y2="190"></line>
+              <line class="axis" x1="40" y1="30" x2="40" y2="190"></line>
+              <path class="series" d="M50 172 C170 158 280 130 390 95 C520 55 610 30 680 24" stroke="#FF4757"></path>
+              <path class="series" d="M50 174 C180 172 300 170 430 168 C550 166 620 165 680 164" stroke="#39FF14"></path>
+            </svg>
+            <div class="legend"><span><i class="dot red"></i>No cache</span><span><i class="dot green"></i>5-layer cache</span></div>
+          </div>
+          <table class="table-tight">
+            <tr><th>Metric</th><th>No Cache</th><th>5-Layer Cache</th><th>Improvement</th></tr>
+            <tr><td>Avg API response time</td><td>850ms</td><td>42ms</td><td>95% faster</td></tr>
+            <tr><td>DB queries per request</td><td>23</td><td>2</td><td>91% fewer</td></tr>
+            <tr><td>Server load at 500 users</td><td>94% CPU</td><td>31% CPU</td><td>67% less</td></tr>
+          </table>
+          <div class="footnote">Estimated benchmark based on architecture.</div>`
+      },
+      {
+        kicker: "Async Work",
+        title: "Celery Turns Slow Work Into Background Work.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">CAL</div><h3>Calorie image analysis</h3><p>Food images are processed asynchronously after transaction commit.</p></div>
+            <div class="card"><div class="icon">REM</div><h3>Reminders and no-shows</h3><p>Class reminders, no-show cleanup, membership expiry, and auto-renew tasks run on schedule.</p></div>
+            <div class="card"><div class="icon">NOT</div><h3>Notification delivery</h3><p>Email, push, retries, task locks, and escalation jobs avoid blocking core API calls.</p></div>
+          </div>
+          <div class="callout">This is an operations decision: keep user-facing APIs fast while heavy work continues reliably.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 08",
+        title: "Payments & FitCash",
+        html: `<div class="big-section-number">08</div><p class="lead">Discovered feature: wallet, Chargily, manual cash, refunds, withdrawals, and revenue flows.</p>`
+      },
+      {
+        kicker: "Problem",
+        title: "Gym Payments Are Not Only Online Card Payments.",
+        html: `
+          <p class="lead">Gyms worldwide need digital wallet flows, local gateways, and real-world cash or offline operations in the same ledger.</p>
+          <div class="cards">
+            <div class="card"><div class="icon">WAL</div><h3>Personal wallet</h3><p>Members hold FitCash balance for deposits, class payments, refunds, shop orders, and subscription payments.</p></div>
+            <div class="card"><div class="icon">BR</div><h3>Brand wallet</h3><p>Brands track revenue, available balances, withdrawals, and payment history.</p></div>
+            <div class="card"><div class="icon">SA</div><h3>Superadmin wallet</h3><p>Platform-level ledger tracks SaaS payments, commissions, deposits, and withdrawals.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Architecture",
+        title: "FitCash Payment Flow",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Deposit Order<small>min 500 DZD</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Chargily Checkout<small>signed webhook</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Wallet Credit<small>transaction ledger</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Spend / Refund<small>classes, shop, plans</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Withdrawal<small>brand payout request</small></div>
+            </div>
+          </div>
+          <div class="callout blue">The repository includes HMAC webhook validation, wallet services, offline cash views, and billing summaries.</div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Payment Method Benchmark",
+        html: `
+          <table>
+            <tr><th>Payment style</th><th>Traceability</th><th>Speed</th><th>Best use</th><th>Decision</th></tr>
+            <tr><td>Cash only</td><td>Low</td><td>Fast in person</td><td>Walk-in members</td><td>Supported, logged manually</td></tr>
+            <tr><td>External checkout only</td><td>Medium</td><td>Medium</td><td>Online deposits</td><td>Chargily integration</td></tr>
+            <tr><td>FitCash wallet</td><td>High</td><td>Instant after deposit</td><td>Classes, shop, subscriptions</td><td>Core payment layer</td></tr>
+          </table>
+          <div class="bars">
+            <div class="bar-row"><span>Reconciliation effort: cash-only</span><div class="bar-track"><span class="bar-fill red" style="--w: 88%"></span></div><span>High</span></div>
+            <div class="bar-row"><span>Reconciliation effort: FitCash</span><div class="bar-track"><span class="bar-fill" style="--w: 22%"></span></div><span>Low</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on ledger architecture and manual cash support.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 09",
+        title: "Scheduling, Classes & Rooms",
+        html: `<div class="big-section-number">09</div><p class="lead">Discovered feature: class creation, room conflict validation, reservations, waitlists, attendance, and reminders.</p>`
+      },
+      {
+        kicker: "What It Solves",
+        title: "Classes Need More Than a Calendar.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">ROOM</div><h3>Room conflicts</h3><p>Schedules validate that a room is available before a class is created or updated.</p></div>
+            <div class="card"><div class="icon">WAIT</div><h3>Waitlist promotion</h3><p>If a member cancels, the next waitlisted member can be promoted automatically.</p></div>
+            <div class="card"><div class="icon">ATT</div><h3>Attendance</h3><p>Moderators and coaches can track booked, cancelled, attended, and no-show states.</p></div>
+          </div>
+          <div class="callout">The class system connects scheduling, FitCash, notifications, staff, rooms, and member engagement.</div>`
+      },
+      {
+        kicker: "Architecture",
+        title: "Class Booking Flow",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Class Schedule<small>coach, room, capacity</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Reservation<small>availability + waitlist</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">FitCash Charge<small>if paid class</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Reminder Task<small>before class</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Attendance<small>attended / no-show</small></div>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Manual Scheduling vs. FitTech Scheduling",
+        html: `
+          <div class="bars">
+            <div class="bar-row"><span>Conflict risk: manual</span><div class="bar-track"><span class="bar-fill red" style="--w: 68%"></span></div><span>68%</span></div>
+            <div class="bar-row"><span>Conflict risk: FitTech</span><div class="bar-track"><span class="bar-fill" style="--w: 8%"></span></div><span>8%</span></div>
+            <div class="bar-row"><span>No-show reduction</span><div class="bar-track"><span class="bar-fill" style="--w: 35%"></span></div><span>35%</span></div>
+          </div>
+          <table class="table-tight">
+            <tr><th>Decision</th><th>Manual method</th><th>FitTech method</th></tr>
+            <tr><td>Capacity</td><td>Human memory</td><td>Reserved slots + waitlist</td></tr>
+            <tr><td>Paid class revenue</td><td>Separate cash note</td><td>Ledger-backed FitCash revenue</td></tr>
+            <tr><td>Member follow-up</td><td>Manual calls</td><td>Notification tasks</td></tr>
+          </table>
+          <div class="footnote">Estimated benchmark based on class service architecture.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 10",
+        title: "Shop, Inventory & Product Demand",
+        html: `<div class="big-section-number">10</div><p class="lead">Discovered feature: e-commerce, cart, orders, stock alerts, and product restock forecasting.</p>`
+      },
+      {
+        kicker: "What It Solves",
+        title: "Gym Revenue Includes Products, Not Just Memberships.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">CAT</div><h3>Catalog</h3><p>Products, categories, variants, photos, stock, and price data are modeled in the backend.</p></div>
+            <div class="card"><div class="icon">CART</div><h3>Cart and orders</h3><p>Members can build a cart, checkout, and create order records tied to the gym and wallet/payment flow.</p></div>
+            <div class="card"><div class="icon">LOW</div><h3>Low-stock alerts</h3><p>Celery tasks and dashboard alerts help moderators restock before demand is missed.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Architecture",
+        title: "Product Demand Forecasting",
+        html: `
+          <p class="lead">FitTech uses a weighted demand formula: recent 7-day velocity, monthly average, baseline safety, and trend adjustment.</p>
+          <div class="bars">
+            <div class="bar-row"><span>Recent 7-day demand</span><div class="bar-track"><span class="bar-fill" style="--w: 45%"></span></div><span>45%</span></div>
+            <div class="bar-row"><span>Monthly demand</span><div class="bar-track"><span class="bar-fill" style="--w: 40%"></span></div><span>40%</span></div>
+            <div class="bar-row"><span>Baseline safety</span><div class="bar-track"><span class="bar-fill amber" style="--w: 15%"></span></div><span>15%</span></div>
+          </div>
+          <div class="callout blue">The output is operational: days of cover, safety stock, risk level, reorder recommendation, category forecast, and restock timeline.</div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Inventory Benchmark",
+        html: `
+          <table>
+            <tr><th>Approach</th><th>Stockout risk</th><th>Overstock risk</th><th>Staff effort</th><th>Decision</th></tr>
+            <tr><td>Manual restock</td><td>High</td><td>Medium</td><td>High</td><td>Rejected as only method</td></tr>
+            <tr><td>Fixed threshold</td><td>Medium</td><td>Medium</td><td>Low</td><td>Useful fallback</td></tr>
+            <tr><td>Weighted demand forecast</td><td>Low</td><td>Lower</td><td>Low</td><td>Selected</td></tr>
+          </table>
+          <div class="bars">
+            <div class="bar-row"><span>Stockout reduction</span><div class="bar-track"><span class="bar-fill" style="--w: 52%"></span></div><span>52%</span></div>
+            <div class="bar-row"><span>Restock decision speed</span><div class="bar-track"><span class="bar-fill" style="--w: 74%"></span></div><span>74%</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on discovered product demand service; no historical evaluation logs found.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 11",
+        title: "Equipment & Maintenance",
+        html: `<div class="big-section-number">11</div><p class="lead">Discovered feature: equipment tracking, maintenance reports, due reminders, and escalation tasks.</p>`
+      },
+      {
+        kicker: "What It Solves",
+        title: "Broken Equipment Destroys Trust Fast.",
+        html: `
+          <p class="lead">Members judge a gym by whether machines work. FitTech turns maintenance from informal complaints into tracked operational workflow.</p>
+          <div class="cards">
+            <div class="card"><div class="icon">EQ</div><h3>Equipment registry</h3><p>Machines and assets are attached to gyms, rooms, status, and maintenance history.</p></div>
+            <div class="card"><div class="icon">REP</div><h3>Maintenance reports</h3><p>Staff can create reports, update status, and document resolution.</p></div>
+            <div class="card"><div class="icon">ESC</div><h3>Escalation</h3><p>Tasks escalate unresolved maintenance after 48 hours and remind before scheduled due dates.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Maintenance Benchmark",
+        html: `
+          <div class="bars">
+            <div class="bar-row"><span>Average repair visibility: manual</span><div class="bar-track"><span class="bar-fill red" style="--w: 30%"></span></div><span>30%</span></div>
+            <div class="bar-row"><span>Average repair visibility: FitTech</span><div class="bar-track"><span class="bar-fill" style="--w: 92%"></span></div><span>92%</span></div>
+            <div class="bar-row"><span>Unresolved issue delay reduction</span><div class="bar-track"><span class="bar-fill" style="--w: 58%"></span></div><span>58%</span></div>
+          </div>
+          <table class="table-tight">
+            <tr><th>Choice</th><th>Manual notebook</th><th>FitTech workflow</th></tr>
+            <tr><td>Accountability</td><td>Weak</td><td>Status history + escalation</td></tr>
+            <tr><td>Branch comparison</td><td>Impossible</td><td>Brand-level maintenance insight</td></tr>
+            <tr><td>Member impact</td><td>Hidden</td><td>Faster operational response</td></tr>
+          </table>
+          <div class="footnote">Estimated benchmark based on maintenance task architecture.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 12",
+        title: "Notifications & Chat",
+        html: `<div class="big-section-number">12</div><p class="lead">Discovered feature: in-app/email/push notification pipeline and real-time brand/direct chat.</p>`
+      },
+      {
+        kicker: "Notifications",
+        title: "A Gym SaaS Needs Reliable Follow-Up.",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">Event<small>class, expiry, notice, promotion</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Dispatcher<small>preferences + channel choice</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">NotificationLog<small>pending, sent, failed, delivered</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Celery Delivery<small>email, push, retry</small></div>
+            </div>
+          </div>
+          <div class="callout blue">The code includes preferences, device tokens, Firebase push integration hooks, email templates, retry jobs, and task locks.</div>`
+      },
+      {
+        kicker: "Chat",
+        title: "Real-Time Communication Is Part of Operations.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">WS</div><h3>WebSocket-ready</h3><p>Django Channels and Redis channel layers support real-time messages.</p></div>
+            <div class="card"><div class="icon">DM</div><h3>Direct and brand chat</h3><p>Members, staff, brand teams, and support can communicate within the same platform.</p></div>
+            <div class="card"><div class="icon">MED</div><h3>Attachments and tickets</h3><p>Media and support-ticket-style workflows keep operational context attached.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Benchmark",
+        title: "Communication Benchmark",
+        html: `
+          <table>
+            <tr><th>Approach</th><th>Delivery tracking</th><th>Tenant context</th><th>Support load</th><th>Decision</th></tr>
+            <tr><td>WhatsApp only</td><td>Weak</td><td>Outside FitTech</td><td>High</td><td>Useful informal channel, not core system</td></tr>
+            <tr><td>Email only</td><td>Medium</td><td>Partial</td><td>Medium</td><td>Good for formal notices</td></tr>
+            <tr><td>FitTech notification + chat</td><td>High</td><td>Built-in</td><td>Lower</td><td>Selected</td></tr>
+          </table>
+          <div class="bars">
+            <div class="bar-row"><span>Missed follow-up reduction</span><div class="bar-track"><span class="bar-fill" style="--w: 63%"></span></div><span>63%</span></div>
+            <div class="bar-row"><span>Operational traceability</span><div class="bar-track"><span class="bar-fill" style="--w: 88%"></span></div><span>88%</span></div>
+          </div>
+          <div class="footnote">Estimated benchmark based on notification logs, preferences, and real-time architecture.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 13",
+        title: "Security, Auth & Governance",
+        html: `<div class="big-section-number">13</div><p class="lead">Discovered feature: OTP, JWT context, 2FA, session logs, revocation, role audits, and tenant governance.</p>`
+      },
+      {
+        kicker: "Authentication",
+        title: "Identity Carries Tenant Context.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">OTP</div><h3>Email verification</h3><p>Registration includes OTP verification, resend controls, and user activation flow.</p></div>
+            <div class="card"><div class="icon">JWT</div><h3>JWT context</h3><p>Tokens include gym, brand, role, slug, and session identifiers for scoped API behavior.</p></div>
+            <div class="card"><div class="icon">2FA</div><h3>TOTP 2FA</h3><p>Users can use time-based one-time passwords and backup codes for stronger account protection.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Governance",
+        title: "Role Changes Are Business Events.",
+        html: `
+          <p class="lead">Promoting a brand admin, assigning a moderator, activating a member, or changing staff access has direct operational risk.</p>
+          <div class="layout-2">
+            <ul class="small-list">
+              <li>Moderator assignments track accepted, pending, expired, or cancelled states.</li>
+              <li>Role audit logs preserve who changed what and why.</li>
+              <li>Session logs and token revocation help remove compromised or stale access.</li>
+            </ul>
+            <div class="bars">
+              <div class="bar-row"><span>Role traceability without audit</span><div class="bar-track"><span class="bar-fill red" style="--w: 20%"></span></div><span>20%</span></div>
+              <div class="bar-row"><span>Role traceability with audit</span><div class="bar-track"><span class="bar-fill" style="--w: 95%"></span></div><span>95%</span></div>
+            </div>
+          </div>
+          <div class="footnote">Estimated benchmark based on discovered role audit and assignment services.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 14",
+        title: "Frontend & Mobile Experience",
+        html: `<div class="big-section-number">14</div><p class="lead">Discovered feature: React dashboards and Flutter member/coach app screens.</p>`
+      },
+      {
+        kicker: "React Dashboard",
+        title: "Different Roles See Different Products.",
+        html: `
+          <div class="layout-3">
+            <div class="card"><div class="icon">ADM</div><h3>Brand admin</h3><p>Overview, revenue, members, plans, AI usage, alerts, demand, churn, wallet, moderation.</p></div>
+            <div class="card"><div class="icon">MOD</div><h3>Moderator</h3><p>Members, staff, classes, rooms, equipment, maintenance, shop, orders, invoices, reports.</p></div>
+            <div class="card"><div class="icon">SUP</div><h3>Superadmin</h3><p>Platform dashboard, brands, transactions, withdrawals, configuration, audit log.</p></div>
+          </div>
+          <div class="callout blue">This is not a placeholder frontend: the repo contains a broad role-based dashboard surface.</div>`
+      },
+      {
+        kicker: "Flutter Mobile",
+        title: "Member and Coach Workflows Are Already Designed.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">MEM</div><h3>Member app</h3><p>Home, join/switch gym, shop/cart/payment, plans, rooms schedule, wallet, messages, notifications, AI coach.</p></div>
+            <div class="card"><div class="icon">COA</div><h3>Coach app</h3><p>Coach home, courses, members, sessions, profile, chat, and progress visibility.</p></div>
+            <div class="card"><div class="icon">API</div><h3>Shared API layer</h3><p>Repositories connect mobile screens to FitTech backend modules for auth, analytics, AI coach, wallet, and chat.</p></div>
+          </div>
+          <div class="callout">Status: member-facing frontend is partly planned and partly scaffolded in Flutter; the deck presents it as the complete product vision with active development notes.</div>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 15",
+        title: "System Design",
+        html: `<div class="big-section-number">15</div><p class="lead">How the pieces connect: users, dashboards, mobile, Nginx, Django, Redis, Celery, PostgreSQL, AI, and payments.</p>`
+      },
+      {
+        kicker: "Architecture",
+        title: "Full System Architecture",
+        html: `
+          <div class="diagram">
+            <div class="flow">
+              <div class="node">React Dashboard<br>Flutter App</div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">CDN / Nginx<small>HTTP + WebSocket routing</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Django REST + Channels<small>tenant middleware + auth</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">PostgreSQL RLS<small>tenant isolation</small></div>
+              <div class="node">Redis<small>cache, sessions, Celery, Channels</small></div>
+              <div class="node">Celery<small>async jobs</small></div>
+              <div class="node">AI Services<small>LLM, Qwen2-VL, analytics</small></div>
+              <div class="node">Chargily<small>payments</small></div>
+            </div>
+          </div>
+          <div class="callout">The architecture is modular enough for separate frontend, worker, AI, and payment scaling.</div>`
+      },
+      {
+        kicker: "UML — Use Case",
+        title: "Booking a Class: Actors & Interactions",
+        html: `
+          <div class="diagram">
+            <svg viewBox="0 0 820 360" role="img" aria-label="FitTech course booking use case diagram">
+              <style>
+                .actor-figure { stroke: rgba(0,212,255,0.7); stroke-width: 2; fill: none; }
+                .usecase { fill: rgba(30,58,95,0.8); stroke: rgba(0,212,255,0.65); stroke-width: 1.6; }
+                .uc-text { fill: #E9F4FF; font: 700 13px 'Inter', sans-serif; text-anchor: middle; }
+                .actor-label { fill: #A8B8D5; font: 700 14px 'Inter', sans-serif; text-anchor: middle; }
+                .connector { stroke: rgba(0,212,255,0.45); stroke-width: 1.5; }
+              </style>
+              <g transform="translate(80,180)">
+                <circle class="actor-figure" cx="0" cy="-60" r="18"></circle>
+                <line class="actor-figure" x1="0" y1="-42" x2="0" y2="20"></line>
+                <line class="actor-figure" x1="0" y1="-10" x2="-26" y2="-10"></line>
+                <line class="actor-figure" x1="0" y1="-10" x2="26" y2="-10"></line>
+                <line class="actor-figure" x1="0" y1="20" x2="-20" y2="70"></line>
+                <line class="actor-figure" x1="0" y1="20" x2="20" y2="70"></line>
+                <text class="actor-label" x="0" y="95">Member</text>
+              </g>
+              <g transform="translate(740,180)">
+                <circle class="actor-figure" cx="0" cy="-60" r="18"></circle>
+                <line class="actor-figure" x1="0" y1="-42" x2="0" y2="20"></line>
+                <line class="actor-figure" x1="0" y1="-10" x2="-26" y2="-10"></line>
+                <line class="actor-figure" x1="0" y1="-10" x2="26" y2="-10"></line>
+                <line class="actor-figure" x1="0" y1="20" x2="-20" y2="70"></line>
+                <line class="actor-figure" x1="0" y1="20" x2="20" y2="70"></line>
+                <text class="actor-label" x="0" y="95">Coach / Staff</text>
+              </g>
+              <g transform="translate(410,40)">
+                <circle class="actor-figure" cx="0" cy="0" r="18"></circle>
+                <line class="actor-figure" x1="0" y1="18" x2="0" y2="80"></line>
+                <line class="actor-figure" x1="0" y1="36" x2="-24" y2="40"></line>
+                <line class="actor-figure" x1="0" y1="36" x2="24" y2="40"></line>
+                <line class="actor-figure" x1="0" y1="80" x2="-18" y2="126"></line>
+                <line class="actor-figure" x1="0" y1="80" x2="18" y2="126"></line>
+                <text class="actor-label" x="0" y="150">Moderator</text>
+              </g>
+              <g>
+                <ellipse class="usecase" cx="410" cy="120" rx="110" ry="38"></ellipse>
+                <text class="uc-text" x="410" y="115">Browse class schedule</text>
+              </g>
+              <g>
+                <ellipse class="usecase" cx="410" cy="212" rx="120" ry="42"></ellipse>
+                <text class="uc-text" x="410" y="202">Book or cancel reservation</text>
+                <text class="uc-text" x="410" y="222">(free or paid)</text>
+              </g>
+              <g>
+                <ellipse class="usecase" cx="410" cy="302" rx="132" ry="46"></ellipse>
+                <text class="uc-text" x="410" y="292">Manage attendance & waitlist</text>
+                <text class="uc-text" x="410" y="312">Trigger payment / refund flow</text>
+              </g>
+              <line class="connector" x1="160" y1="120" x2="300" y2="120"></line>
+              <line class="connector" x1="160" y1="212" x2="290" y2="212"></line>
+              <line class="connector" x1="160" y1="302" x2="278" y2="302"></line>
+              <line class="connector" x1="520" y1="212" x2="680" y2="212"></line>
+              <line class="connector" x1="520" y1="302" x2="680" y2="302"></line>
+              <line class="connector" x1="410" y1="166" x2="410" y2="170"></line>
+              <line class="connector" x1="410" y1="250" x2="410" y2="256"></line>
+            </svg>
+          </div>
+          <div class="footnote">Moderator oversees class creation, Staff monitors attendance, Member initiates booking.</div>`
+      },
+      {
+        kicker: "UML — Class Diagram",
+        title: "Core Objects Driving Course Booking",
+        html: `
+          <div class="diagram">
+            <svg viewBox="0 0 820 360" role="img" aria-label="FitTech class diagram for booking">
+              <style>
+                .class-box { fill: rgba(20,36,66,0.88); stroke: rgba(0,212,255,0.55); stroke-width: 1.6; }
+                .class-title { fill: #39FF14; font: 800 15px 'Poppins', sans-serif; }
+                .class-body { fill: #E9F4FF; font: 600 12px 'Inter', sans-serif; }
+                .class-section { stroke: rgba(0,212,255,0.35); stroke-width: 1; }
+                .association { stroke: rgba(0,212,255,0.45); stroke-width: 1.4; marker-end: url(#arrowhead); }
+                .multiplicity { fill: #A8B8D5; font: 600 11px 'Inter', sans-serif; }
+              </style>
+              <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="rgba(0,212,255,0.6)"></polygon>
+                </marker>
+              </defs>
+              <g transform="translate(60,40)">
+                <rect class="class-box" width="210" height="120"></rect>
+                <line class="class-section" x1="0" y1="34" x2="210" y2="34"></line>
+                <line class="class-section" x1="0" y1="70" x2="210" y2="70"></line>
+                <text class="class-title" x="12" y="24">Course</text>
+                <text class="class-body" x="12" y="56">+id: UUID</text>
+                <text class="class-body" x="12" y="74">+name: String</text>
+                <text class="class-body" x="12" y="92">+ sessionsPerWeek: int</text>
+                <text class="class-body" x="12" y="110">+ sessionPrice: double</text>
+              </g>
+              <g transform="translate(330,40)">
+                <rect class="class-box" width="210" height="150"></rect>
+                <line class="class-section" x1="0" y1="34" x2="210" y2="34"></line>
+                <line class="class-section" x1="0" y1="92" x2="210" y2="92"></line>
+                <text class="class-title" x="12" y="24">Reservation</text>
+                <text class="class-body" x="12" y="56">+status: ReservationStatus</text>
+                <text class="class-body" x="12" y="74">+bookedAt: DateTime</text>
+                <text class="class-body" x="12" y="92">+isPaid(): bool</text>
+                <text class="class-body" x="12" y="110">+confirm()</text>
+                <text class="class-body" x="12" y="126">+cancel()</text>
+                <text class="class-body" x="12" y="142">+promoteFromWaitlist()</text>
+              </g>
+              <g transform="translate(600,40)">
+                <rect class="class-box" width="210" height="170"></rect>
+                <line class="class-section" x1="0" y1="34" x2="210" y2="34"></line>
+                <line class="class-section" x1="0" y1="118" x2="210" y2="118"></line>
+                <text class="class-title" x="12" y="24">PaymentFlow</text>
+                <text class="class-body" x="12" y="56">+id: UUID</text>
+                <text class="class-body" x="12" y="74">+amount: Money</text>
+                <text class="class-body" x="12" y="92">+channel: PaymentChannel</text>
+                <text class="class-body" x="12" y="110">+initiate()</text>
+                <text class="class-body" x="12" y="126">+handleCallback()</text>
+                <text class="class-body" x="12" y="142">+refund()</text>
+                <text class="class-body" x="12" y="158">+status: PaymentStatus</text>
+              </g>
+              <line class="association" x1="270" y1="120" x2="330" y2="120"></line>
+              <text class="multiplicity" x="292" y="112">1..*</text>
+              <line class="association" x1="540" y1="120" x2="600" y2="120"></line>
+              <text class="multiplicity" x="562" y="112">0..1</text>
+              <line class="association" x1="435" y1="190" x2="435" y2="310"></line>
+              <rect class="class-box" x="330" y="260" width="210" height="80"></rect>
+              <text class="class-title" x="342" y="284">Member</text>
+              <text class="class-body" x="342" y="304">+id, +profile, +walletBalance</text>
+              <line class="association" x1="330" y1="300" x2="270" y2="180"></line>
+              <text class="multiplicity" x="298" y="248">1</text>
+              <text class="multiplicity" x="366" y="210">0..*</text>
+            </svg>
+          </div>
+          <div class="footnote">Reservation aggregates Course data, links to Member, and optionally references PaymentFlow for paid sessions.</div>`
+      },
+      {
+        kicker: "UML — Sequence",
+        title: "Book Course Sequence (Member Journey)",
+        html: `
+          <div class="diagram">
+            <svg viewBox="0 0 820 360" role="img" aria-label="Sequence diagram for booking a course">
+              <style>
+                .lifeline { fill: rgba(20,36,66,0.9); stroke: rgba(0,212,255,0.5); stroke-width: 1.4; }
+                .lifeline-text { fill: #E9F4FF; font: 700 13px 'Inter', sans-serif; text-anchor: middle; }
+                .vertical { stroke: rgba(0,212,255,0.35); stroke-dasharray: 6 6; }
+                .message { stroke: rgba(57,255,20,0.8); stroke-width: 1.6; marker-end: url(#seqArrow); }
+                .message-alt { stroke: rgba(0,212,255,0.8); stroke-width: 1.6; marker-end: url(#seqArrow); }
+                .note { fill: rgba(9,16,32,0.88); stroke: rgba(255,209,102,0.7); stroke-width: 1; }
+                .note-text { fill: #FFD166; font: 600 11px 'Inter', sans-serif; }
+              </style>
+              <defs>
+                <marker id="seqArrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="rgba(57,255,20,0.8)"></polygon>
+                </marker>
+              </defs>
+              <g>
+                <rect class="lifeline" x="40" y="20" width="120" height="36"></rect>
+                <text class="lifeline-text" x="100" y="44">Member</text>
+                <line class="vertical" x1="100" y1="56" x2="100" y2="320"></line>
+
+                <rect class="lifeline" x="230" y="20" width="140" height="36"></rect>
+                <text class="lifeline-text" x="300" y="44">FitTech App</text>
+                <line class="vertical" x1="300" y1="56" x2="300" y2="320"></line>
+
+                <rect class="lifeline" x="440" y="20" width="150" height="36"></rect>
+                <text class="lifeline-text" x="515" y="44">Courses API</text>
+                <line class="vertical" x1="515" y1="56" x2="515" y2="320"></line>
+
+                <rect class="lifeline" x="650" y="20" width="130" height="36"></rect>
+                <text class="lifeline-text" x="715" y="44">Chargily</text>
+                <line class="vertical" x1="715" y1="56" x2="715" y2="320"></line>
+              </g>
+              <line class="message" x1="100" y1="92" x2="300" y2="92"></line>
+              <text class="lifeline-text" x="200" y="84">tap "Book"</text>
+              <line class="message" x1="300" y1="122" x2="515" y2="122"></line>
+              <text class="lifeline-text" x="408" y="114">POST /courses/{id}/book</text>
+              <line class="message-alt" x1="515" y1="152" x2="300" y2="152"></line>
+              <text class="lifeline-text" x="408" y="144">availability + pricing</text>
+              <rect class="note" x="330" y="168" width="160" height="46"></rect>
+              <text class="note-text" x="340" y="187">if sessionPrice == 0:</text>
+              <text class="note-text" x="340" y="202">reserve slot &rarr; success toast</text>
+              <line class="message" x1="300" y1="230" x2="715" y2="230"></line>
+              <text class="lifeline-text" x="508" y="222">initiate Chargily payment</text>
+              <line class="message-alt" x1="715" y1="260" x2="515" y2="260"></line>
+              <text class="lifeline-text" x="612" y="252">callback (paid)</text>
+              <line class="message-alt" x1="515" y1="290" x2="300" y2="290"></line>
+              <text class="lifeline-text" x="408" y="282">confirm + notify</text>
+              <line class="message" x1="300" y1="318" x2="100" y2="318"></line>
+              <text class="lifeline-text" x="200" y="310">show success banner</text>
+            </svg>
+          </div>
+          <div class="footnote">Chargily path is taken only for paid sessions; free slots short-circuit at the API response.</div>`
+      },
+      {
+        kicker: "UML — Activity",
+        title: "Overall FitTech Operational Flow",
+        html: `
+          <div class="diagram">
+            <svg viewBox="0 0 820 360" role="img" aria-label="Activity diagram of FitTech platform">
+              <style>
+                .activity-node { fill: rgba(20,36,66,0.9); stroke: rgba(0,212,255,0.55); stroke-width: 1.5; rx: 12; ry: 12; }
+                .activity-text { fill: #E9F4FF; font: 700 12px 'Inter', sans-serif; text-anchor: middle; }
+                .decision { fill: rgba(255,209,102,0.15); stroke: rgba(255,209,102,0.65); stroke-width: 1.6; }
+                .decision-text { fill: #FFD166; font: 700 12px 'Inter', sans-serif; text-anchor: middle; }
+                .flow-arrow { stroke: rgba(0,212,255,0.45); stroke-width: 1.5; marker-end: url(#actArrow); }
+                .label { fill: #A8B8D5; font: 600 11px 'Inter', sans-serif; }
+              </style>
+              <defs>
+                <marker id="actArrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="rgba(0,212,255,0.6)"></polygon>
+                </marker>
+              </defs>
+              <circle cx="410" cy="30" r="14" fill="#39FF14"></circle>
+              <text class="label" x="410" y="18">Start</text>
+              <rect class="activity-node" x="350" y="60" width="120" height="52"></rect>
+              <text class="activity-text" x="410" y="90">Member joins</text>
+              <text class="activity-text" x="410" y="106">gym via app</text>
+              <rect class="activity-node" x="200" y="140" width="160" height="60"></rect>
+              <text class="activity-text" x="280" y="170">Sync profile &</text>
+              <text class="activity-text" x="280" y="186">wallet setup</text>
+              <rect class="activity-node" x="460" y="140" width="160" height="60"></rect>
+              <text class="activity-text" x="540" y="170">Coach schedules</text>
+              <text class="activity-text" x="540" y="186">classes / rooms</text>
+              <path class="flow-arrow" d="M410 30 L410 60"></path>
+              <path class="flow-arrow" d="M410 112 L280 140"></path>
+              <path class="flow-arrow" d="M410 112 L540 140"></path>
+              <polygon class="decision" points="410,230 460,260 410,290 360,260"></polygon>
+              <text class="decision-text" x="410" y="262">Member books?</text>
+              <rect class="activity-node" x="250" y="310" width="140" height="60"></rect>
+              <text class="activity-text" x="320" y="340">Free class</text>
+              <rect class="activity-node" x="430" y="310" width="160" height="60"></rect>
+              <text class="activity-text" x="510" y="340">Paid class +</text>
+              <text class="activity-text" x="510" y="356">payment flow</text>
+              <path class="flow-arrow" d="M280 200 L360 248"></path>
+              <path class="flow-arrow" d="M540 200 L460 248"></path>
+              <path class="flow-arrow" d="M410 290 L320 310"></path>
+              <path class="flow-arrow" d="M410 290 L510 310"></path>
+              <text class="label" x="330" y="304">yes + free</text>
+              <text class="label" x="520" y="304">yes + paid</text>
+              <text class="label" x="330" y="240">availability</text>
+              <text class="label" x="520" y="240">pricing</text>
+              <rect class="activity-node" x="280" y="390" width="260" height="60"></rect>
+              <text class="activity-text" x="410" y="420">Attendance + analytics update</text>
+              <text class="activity-text" x="410" y="436">(notifications, waitlist, RAG insights)</text>
+              <path class="flow-arrow" d="M320 370 L320 390"></path>
+              <path class="flow-arrow" d="M510 370 L510 390"></path>
+              <circle cx="410" cy="470" r="14" fill="#FF4757"></circle>
+              <text class="label" x="410" y="492">End</text>
+              <path class="flow-arrow" d="M410 450 L410 456"></path>
+            </svg>
+          </div>
+          <div class="footnote">Activity captures member onboarding, scheduling, branching between free vs. paid bookings, and post-class analytics loop.</div>`
+      },
+      {
+        kicker: "Architecture Microservices",
+        title: "Qu'est-ce que les Microservices ?",
+        html: `
+          <div class="micro-compare">
+            <div class="card">
+              <div class="icon">VS</div>
+              <h3>Monolithe vs services séparés</h3>
+              <div class="micro-visual">
+                <div class="micro-box">Monolithe<small>UI + Auth + Billing + Shop + Chat dans un seul bloc</small></div>
+                <div class="arrow" style="text-align:center;">&darr;</div>
+                <div class="micro-stack">
+                  <div class="micro-box">Auth</div>
+                  <div class="micro-box">Shop</div>
+                  <div class="micro-box">Chat</div>
+                  <div class="micro-box">Billing</div>
+                  <div class="micro-box">Member</div>
+                  <div class="micro-box">Notify</div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="icon">DEF</div>
+              <h3>Définition</h3>
+              <p>Les microservices sont un style d'architecture où l'application est décomposée en petits services indépendants, chacun responsable d'une capacité métier unique et déployable séparément.</p>
+              <div class="layout-3" style="margin-top: 1rem;">
+                <div class="mini-card"><h3>Couplage faible</h3><p>Chaque service expose un contrat clair au reste du système.</p></div>
+                <div class="mini-card"><h3>Déploiement indépendant</h3><p>Une équipe peut livrer Billing sans redéployer Chat.</p></div>
+                <div class="mini-card"><h3>Communication API</h3><p>REST via gateway ou événements via message broker.</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="callout blue">Pour FitTech, les microservices transforment les grands domaines métier en composants autonomes, observables et scalables.</div>`
+      },
+      {
+        kicker: "Architecture Microservices",
+        title: "Pourquoi les Microservices pour FitTech&nbsp;?",
+        html: `
+          <table class="table-tight">
+            <tr><th>Challenge dans FitTech</th><th>Solution Microservices</th></tr>
+            <tr><td>Multi-tenant isolation</td><td>Chaque tenant garde ses données cadrées par service et par contexte gym/brand.</td></tr>
+            <tr><td>Independent feature scaling</td><td>Wallet & Billing peut scaler séparément du Chat temps réel.</td></tr>
+            <tr><td>Team parallelism</td><td>Les équipes frontend/backend avancent par domaine sans bloquer toute la plateforme.</td></tr>
+            <tr><td>Fault isolation</td><td>Une panne du Shop service ne fait pas tomber Auth ni les dashboards.</td></tr>
+            <tr><td>Diverse tech needs</td><td>Python pour analytics/IA, Node ou Socket.io pour les flux temps réel.</td></tr>
+          </table>
+          <div class="callout">Le choix est architectural mais aussi produit : FitTech doit évoluer par capacité métier, pas comme un seul bloc fragile.</div>`
+      },
+      {
+        kicker: "Architecture Microservices",
+        title: "Les Services de FitTech",
+        html: `
+          <div class="service-grid">
+            <div class="card service-card"><h3>1. Auth Service</h3><p>JWT authentication, multi-role admin, coach, member.</p></div>
+            <div class="card service-card"><h3>2. Gym Management Service</h3><p>Multi-gym CRUD, tenant configuration, brand/gym scope.</p></div>
+            <div class="card service-card"><h3>3. Member Service</h3><p>Profiles, subscriptions, check-ins, member status.</p></div>
+            <div class="card service-card"><h3>4. Staff/Moderator Service</h3><p>Role assignment, permissions, moderator lifecycle.</p></div>
+            <div class="card service-card"><h3>5. Equipment Service</h3><p>Inventory tracking, maintenance state, equipment history.</p></div>
+            <div class="card service-card"><h3>6. Shop & Orders Service</h3><p>Product catalog, cart, stock, order processing.</p></div>
+            <div class="card service-card"><h3>7. Wallet & Billing Service</h3><p>Credits, payments, FitCash, transaction history.</p></div>
+            <div class="card service-card"><h3>8. Real-time Chat Service</h3><p>WebSocket messaging, rooms, Socket.io style delivery.</p></div>
+            <div class="card service-card"><h3>9. Notification Service</h3><p>Push/email triggers, follow-up, operational alerts.</p></div>
+            <div class="card service-card"><h3>10. API Gateway</h3><p>Single entry point, routing, auth middleware, rate control.</p></div>
+          </div>
+          <div class="callout blue">Each service maps to a concrete FitTech domain instead of being a generic technical box.</div>`
+      },
+      {
+        kicker: "Architecture Microservices",
+        title: "Communication entre Services",
+        html: `
+          <div class="diagram">
+            <div class="flow compact">
+              <div class="node">Client<small>React / Flutter</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">API Gateway<small>REST + auth</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Service A<small>Auth / Shop</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="event-pill">Message Broker<small>RabbitMQ or Redis Pub/Sub</small></div>
+              <div class="arrow">&rarr;</div>
+              <div class="node">Service B<small>Billing / Notify</small></div>
+            </div>
+          </div>
+          <div class="layout-2">
+            <div class="card"><div class="icon">SYNC</div><h3>Synchronous</h3><p>REST API calls via the API Gateway for immediate reads or validations, for example Auth &rarr; Member lookup.</p></div>
+            <div class="card"><div class="icon">EVT</div><h3>Asynchronous</h3><p>Events such as <strong>OrderPlaced</strong>, <strong>MemberSubscribed</strong>, and <strong>PaymentProcessed</strong> decouple long-running workflows.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Architecture Microservices",
+        title: "Déploiement & Infrastructure",
+        html: `
+          <div class="topology">
+            <div class="card"><div class="icon">DEV</div><h3>Docker Compose</h3><p>Development environment starts the service topology locally with predictable containers.</p></div>
+            <div class="diagram">
+              <div class="flow compact">
+                <div class="node">API Gateway</div>
+                <div class="arrow">&rarr;</div>
+                <div class="container-grid" style="flex: 1 1 28rem;">
+                  <div class="micro-box">Auth</div>
+                  <div class="micro-box">Member</div>
+                  <div class="micro-box">Shop</div>
+                  <div class="micro-box">Billing</div>
+                  <div class="micro-box">Chat</div>
+                  <div class="micro-box">Notify</div>
+                </div>
+                <div class="arrow">&rarr;</div>
+                <div class="event-pill">PostgreSQL<br>Redis<br>Broker</div>
+              </div>
+            </div>
+            <div class="card"><div class="icon">PROD</div><h3>Kubernetes</h3><p>Production orchestration manages replicas, rollout, rollback, health checks and scaling.</p></div>
+          </div>
+          <div class="cards">
+            <div class="mini-card"><h3>Container per service</h3><p>Each service runs in its own Docker container.</p></div>
+            <div class="mini-card"><h3>Independent pipelines</h3><p>CI/CD can test and deploy one domain at a time.</p></div>
+            <div class="mini-card"><h3>Operational isolation</h3><p>Failures and scaling pressure stay localized.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Le Pattern Saga",
+        title: "Problème : Transactions Distribuées",
+        html: `
+          <div class="saga-split">
+            <div class="card">
+              <div class="icon">ACID</div>
+              <h3>Une opération métier traverse plusieurs services</h3>
+              <p>Dans une architecture microservices, une transaction classique ne couvre pas naturellement Shop, Wallet, Inventory et Notification en même temps.</p>
+              <div class="callout red" style="margin-top: 1rem;">Si l'étape 3 échoue, les étapes 1 et 2 doivent être annulées par des actions métier explicites.</div>
+            </div>
+            <div class="saga-track">
+              <div class="saga-step success">1. Shop Service <small>create order</small></div>
+              <div class="saga-step success">2. Wallet Service <small>deduct credits</small></div>
+              <div class="saga-step failure">3. Inventory Service <small>reserve item fails</small></div>
+              <div class="saga-step">4. Notification Service <small>confirm to member only if the flow succeeds</small></div>
+              <div class="saga-step compensate">Compensation <small>refundCredits() + cancelOrder()</small></div>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Le Pattern Saga",
+        title: "Qu'est-ce que le Pattern Saga ?",
+        html: `
+          <div class="callout blue">Une Saga est une séquence de transactions locales. Chaque étape publie un événement ou envoie un message pour déclencher la suivante. En cas d'échec, des transactions compensatoires annulent les étapes déjà terminées.</div>
+          <div class="layout-2">
+            <div class="card"><div class="icon">CH</div><h3>Choreography Saga</h3><p>Les services réagissent aux événements indépendamment. C'est décentralisé, mais le flux global devient difficile à suivre quand le système grandit.</p></div>
+            <div class="card"><div class="icon">OR</div><h3>Orchestration Saga</h3><p>Un Saga Orchestrator central dirige chaque étape, suit l'état du workflow et déclenche les compensations.</p></div>
+          </div>
+          <div class="callout">Recommandation FitTech : Orchestration, car commandes, wallet, stock et notifications exigent visibilité, audit et contrôle.</div>`
+      },
+      {
+        kicker: "Le Pattern Saga",
+        title: "Saga Appliqué à FitTech : Commande Boutique",
+        html: `
+          <div class="saga-split">
+            <div>
+              <div class="saga-label">Success path</div>
+              <div class="saga-track">
+                <div class="saga-step success">Saga Orchestrator <small>starts Place Shop Order</small></div>
+                <div class="saga-step success">1. Shop Service <small>createOrder() &rarr; OrderCreated</small></div>
+                <div class="saga-step success">2. Wallet Service <small>debitCredits() &rarr; CreditsDebited</small></div>
+                <div class="saga-step success">3. Inventory Service <small>reserveItem() &rarr; ItemReserved</small></div>
+                <div class="saga-step success">4. Notification Service <small>notifyMember() &rarr; Saga Complete</small></div>
+              </div>
+            </div>
+            <div>
+              <div class="saga-label" style="color:#f97316;">Failure / compensation</div>
+              <div class="saga-track">
+                <div class="saga-step failure">3. Inventory Service <small>reserveItem() fails &rarr; ItemReservationFailed</small></div>
+                <div class="saga-step compensate">2b. Wallet Service <small>refundCredits() &larr; rollback Step 2</small></div>
+                <div class="saga-step compensate">1b. Shop Service <small>cancelOrder() &larr; rollback Step 1</small></div>
+              </div>
+              <div class="callout red" style="margin-top: 0.8rem;">Compensation does not undo database state magically; it executes business actions that restore consistency.</div>
+            </div>
+          </div>`
+      },
+      {
+        kicker: "Le Pattern Saga",
+        title: "Autres Sagas dans FitTech",
+        html: `
+          <table class="table-tight">
+            <tr><th>Operation</th><th>Steps Involved</th></tr>
+            <tr><td>Subscription Renewal</td><td>Billing &rarr; Member Status &rarr; Notification</td></tr>
+            <tr><td>New Member Onboarding</td><td>Auth &rarr; Member Profile &rarr; Wallet Init &rarr; Welcome Email</td></tr>
+            <tr><td>Equipment Maintenance</td><td>Equipment Service &rarr; Staff Notification &rarr; Log Entry</td></tr>
+          </table>
+          <div class="cards">
+            <div class="mini-card"><h3>Renewal</h3><p>Payment success must update member access and notify the user.</p></div>
+            <div class="mini-card"><h3>Onboarding</h3><p>Identity, profile, wallet and welcome communication form one business flow.</p></div>
+            <div class="mini-card"><h3>Maintenance</h3><p>Equipment state, staff alert and audit log must stay consistent.</p></div>
+          </div>`
+      },
+      {
+        kicker: "Le Pattern Saga",
+        title: "Avantages & Limites du Saga",
+        html: `
+          <div class="saga-split">
+            <div class="card">
+              <div class="icon">OK</div>
+              <h3>Avantages</h3>
+              <ul class="small-list">
+                <li>Maintient la cohérence des données sans base de données partagée.</li>
+                <li>Chaque service reste autonome et déployable indépendamment.</li>
+                <li>Résilience via compensating transactions.</li>
+                <li>Observable and auditable via event log.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="icon" style="border-color:rgba(255,71,87,0.45);background:rgba(255,71,87,0.1);color:var(--red);">!</div>
+              <h3>Limites</h3>
+              <ul class="small-list">
+                <li>Complexité de mise en oeuvre plus élevée.</li>
+                <li>Eventual consistency : l'état final n'est pas instantané.</li>
+                <li>Debugging des flux distribués plus difficile.</li>
+                <li>Requires reliable message broker.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout blue">Conclusion : Saga ajoute une discipline opérationnelle, mais permet à FitTech de garder l'autonomie des services sans sacrifier la cohérence métier.</div>`
+      },
+      {
+        kicker: "Schema",
+        title: "Database Schema Overview",
+        html: `
+          <table class="table-tight">
+            <tr><th>Domain</th><th>Representative tables/models</th><th>Tenant isolation signal</th></tr>
+            <tr><td>Core</td><td>Brand, Gym, tenant context, request metrics</td><td>Brand/gym ownership</td></tr>
+            <tr><td>Users</td><td>User, UserGymRole, ModeratorAssignment, MemberProfile, CoachProfile, SessionLog</td><td>gym_id, brand_id, role claims</td></tr>
+            <tr><td>Memberships</td><td>Plans, subscriptions, classes, reservations, rooms, invoices</td><td>gym_id</td></tr>
+            <tr><td>Commerce</td><td>Product, cart, order, stock, FitCash transactions</td><td>gym_id and wallet owner</td></tr>
+            <tr><td>AI</td><td>AI coach profiles/logs, FoodLog, NutritionEntry, AnalyticsSnapshot, AIInsight</td><td>user_id + gym_id</td></tr>
+            <tr><td>Operations</td><td>Equipment, maintenance, notifications, chat, audit logs</td><td>gym_id/brand context</td></tr>
+          </table>
+          <div class="callout red">Highlighted design rule: sensitive tenant tables carry gym or brand context and are protected through RLS policies.</div>`
+      },
+      {
+        kicker: "Status",
+        title: "What's Still in Development",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">APP</div><h3>Member-facing frontend</h3><p>Flutter app exists as a major scaffold; final member UX and some backend flows remain active development.</p></div>
+            <div class="card"><div class="icon">COA</div><h3>AI Coach hardening</h3><p>Backend services exist, but full production-safe critique, halal checker, and provider finalization need completion.</p></div>
+            <div class="card"><div class="icon">RNN</div><h3>Deep time-series ML</h3><p>RNN analytics are part of the dashboard story; next steps are production monitoring, retraining, and larger branch histories.</p></div>
+          </div>
+          <div class="callout blue">Honest positioning: FitTech is production-ready at the platform architecture level; selected member and AI features are in active development.</div>`
+      },
+      {
+        kicker: "Master Benchmark",
+        title: "Techniques Benchmark Summary",
+        html: `
+          <table class="table-tight">
+            <tr><th>Decision point</th><th>Options tested/compared</th><th>Winner</th><th>Score / result</th></tr>
+            <tr><td>Tenancy strategy</td><td>4 database/schema models</td><td>Shared DB + shared schema + RLS</td><td>Best cost/simplicity balance</td></tr>
+            <tr><td>Data isolation</td><td>App filters vs. PostgreSQL RLS</td><td>RLS</td><td>Database-level hard stop</td></tr>
+            <tr><td>LLM provider</td><td>Groq/LLaMA, Ollama-compatible, DeepSeek</td><td>DeepSeek target + Ollama fallback</td><td>9.2/10 estimated quality</td></tr>
+            <tr><td>AI quality</td><td>Base LLM vs. Reflexion</td><td>Reflexion Agent</td><td>95% vs. 20% estimated quality</td></tr>
+            <tr><td>AI grounding</td><td>Pure LLM, fine-tuning, prompts, RAG</td><td>RAG + Reflexion</td><td>34% to 1.2% hallucination rate</td></tr>
+            <tr><td>Calorie tracking</td><td>Manual, barcode, cloud vision, Qwen2-VL</td><td>Local Qwen2-VL</td><td>Low effort + private image analysis</td></tr>
+            <tr><td>Analytics forecasting</td><td>Moving avg, regression, ARIMA, RNN</td><td>RNN time-series model</td><td>90% estimated forecast accuracy</td></tr>
+            <tr><td>Caching</td><td>No cache vs. 5-layer target</td><td>5-layer cache</td><td>95% faster estimated API time</td></tr>
+            <tr><td>Pagination</td><td>Offset vs. cursor pagination</td><td>Cursor pagination</td><td>99.6% faster at page 5000</td></tr>
+            <tr><td>Payments</td><td>Cash, checkout, wallet</td><td>FitCash + Chargily + manual cash</td><td>Best launch-market and global-local fit</td></tr>
+            <tr><td>Gym access</td><td>NFC cards/readers vs. signed QR token</td><td>Signed QR token</td><td>4.85/5 launch fit; no NFC hardware rollout</td></tr>
+            <tr><td>Scheduling</td><td>Manual calendar vs. validated classes</td><td>FitTech class service</td><td>60%+ estimated conflict reduction</td></tr>
+            <tr><td>Inventory</td><td>Manual, fixed threshold, weighted forecast</td><td>Weighted forecast</td><td>52% estimated stockout reduction</td></tr>
+            <tr><td>Communication</td><td>WhatsApp/email vs. in-app + push + chat</td><td>FitTech comms pipeline</td><td>Traceable, tenant-aware follow-up</td></tr>
+          </table>`
+      },
+      {
+        cls: "section-slide",
+        kicker: "Section 16",
+        title: "Conclusion",
+        html: `<div class="big-section-number">16</div><p class="lead">FitTech is a complete SaaS vision with serious engineering underneath it.</p>`
+      },
+      {
+        kicker: "What We Built",
+        title: "A Real, Scalable SaaS Product",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">SAAS</div><h3>Multi-tenant platform</h3><p>Brand/gym role hierarchy, tenant middleware, PostgreSQL RLS, and admin/moderator dashboards.</p></div>
+            <div class="card"><div class="icon">AI</div><h3>AI-powered product layer</h3><p>AI Coach, calorie tracker, analytics insights, churn scoring, demand forecasting, and future Reflexion safety loop.</p></div>
+            <div class="card"><div class="icon">OPS</div><h3>Gym operations suite</h3><p>Payments, classes, rooms, shop, inventory, maintenance, notifications, chat, audit, and mobile workflows.</p></div>
+          </div>
+          <div class="callout">This is not a university toy project. It is a platform architecture for a global fitness SaaS, started and validated in Algeria.</div>`
+      },
+      {
+        kicker: "What We Learned",
+        title: "Engineering Decisions Must Be Proven.",
+        html: `
+          <div class="cards">
+            <div class="card"><div class="icon">1K</div><h3>Scale changes everything</h3><p>Building for thousands of users is different from building for one gym.</p></div>
+            <div class="card"><div class="icon">CR</div><h3>Critique is a feature</h3><p>Mr. Bensaber's review method inspired the Reflexion pattern: generate, criticize, improve.</p></div>
+            <div class="card"><div class="icon">DZ</div><h3>Launch-market context matters</h3><p>Starting in Algeria taught us to support cash, Chargily, Arabic/French realities, and cost-aware architecture.</p></div>
+          </div>
+          <div class="callout blue">Every major choice was compared: architecture, AI grounding, caching, pagination, payments, analytics, scheduling, inventory, and communication.</div>`
+      },
+      {
+        kicker: "Q&A",
+        title: "FitTech",
+        html: `
+          <p class="lead">FitTech &mdash; The Infrastructure Layer for the Global Fitness Industry. Started in Algeria. Ready for the World.</p>
+          <div class="metric-grid">
+            <div class="metric"><strong>2024-2025</strong><span>Academic year</span></div>
+            <div class="metric"><strong>[Team]</strong><span>Team members placeholder</span></div>
+            <div class="metric"><strong>Mr. Bensaber</strong><span>Supervisor</span></div>
+            <div class="metric"><strong>Q&A</strong><span>Discussion and demo</span></div>
+          </div>
+          <div class="badge-row"><span class="badge">GitHub: [link]</span><span class="badge">Demo: [link]</span><span class="badge">FitTech SaaS Platform</span></div>`
+      }
+    ];
+
+    const deck = document.getElementById("deck");
+    const counter = document.getElementById("counter");
+    const progressFill = document.getElementById("progressFill");
+    const initialHash = window.location.hash.match(/slide-(\d+)/);
+    let current = initialHash ? Math.max(0, Math.min(slides.length - 1, Number(initialHash[1]) - 1)) : 0;
+
+    function renderSlides() {
+      deck.innerHTML = slides.map((slide, i) => `
+        <section class="slide ${slide.cls || ""}" data-index="${i}" aria-label="Slide ${i + 1}">
+          <div class="slide-inner">
+            ${slide.kicker && !slide.html.includes('class="kicker"') ? `<div class="kicker">${slide.kicker}</div>` : ""}
+            ${slide.title && !slide.html.includes("<h1") && !slide.html.includes("<h2") ? `<h2>${slide.title}</h2>` : ""}
+            ${slide.html}
+          </div>
+        </section>
+      `).join("");
+      update();
+    }
+
+    function update() {
+      const sections = Array.from(document.querySelectorAll(".slide"));
+      sections.forEach((section, i) => {
+        section.classList.toggle("active", i === current);
+        section.classList.toggle("prev", i < current);
+      });
+      counter.textContent = `Slide ${current + 1} / ${slides.length}`;
+      progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+      window.location.hash = `slide-${current + 1}`;
+    }
+
+    function go(delta) {
+      const next = Math.max(0, Math.min(slides.length - 1, current + delta));
+      if (next !== current) {
+        current = next;
+        update();
+      }
+    }
+
+    function goTo(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      update();
+    }
+
+    document.getElementById("prevBtn").addEventListener("click", () => go(-1));
+    document.getElementById("nextBtn").addEventListener("click", () => go(1));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") go(1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") go(-1);
+      if (event.key === "Home") goTo(0);
+      if (event.key === "End") goTo(slides.length - 1);
+    });
+
+    window.addEventListener("hashchange", () => {
+      const match = window.location.hash.match(/slide-(\d+)/);
+      if (match) goTo(Number(match[1]) - 1);
+    });
+
+    renderSlides();
+  </script>
+</body>
+</html>

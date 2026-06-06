@@ -1,0 +1,8 @@
+<form method="post">
+  {% csrf_token %}
+  <h2>Enter your phone number</h2>
+  {{ form.as_p }} {% for msg in messages %}
+  <p>{{ msg }}</p>
+  {% endfor %}
+  <button type="submit">Send Code</button>
+</form>

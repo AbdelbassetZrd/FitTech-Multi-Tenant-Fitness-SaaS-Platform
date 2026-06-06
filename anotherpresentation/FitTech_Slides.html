@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitTech System Architecture – Codex Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05060F;
+      --panel: #080924;
+      --panel-alt: #0E1235;
+      --accent: #4CD1FF;
+      --accent-strong: #29E7AE;
+      --accent-warm: #FF8E5E;
+      --text: #F5F8FF;
+      --muted: #A8B4D4;
+      --grid: rgba(76, 209, 255, 0.08);
+      --border: rgba(76, 209, 255, 0.14);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(76, 209, 255, 0.18), transparent 48%),
+        radial-gradient(circle at 80% 10%, rgba(41, 231, 174, 0.18), transparent 48%),
+        radial-gradient(circle at 50% 110%, rgba(255, 142, 94, 0.15), transparent 55%);
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        linear-gradient(0deg, var(--grid) 1px, transparent 1px);
+      background-size: 110px 110px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 6px; background: rgba(255,255,255,0.08); z-index: 200; backdrop-filter: blur(14px); }
+    .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width 280ms ease; }
+
+    .counter { position: fixed; bottom: 2.5rem; left: 2.5rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); z-index: 150; }
+
+    .controls { position: fixed; bottom: 2rem; right: 2rem; display: flex; gap: 0.75rem; z-index: 150; }
+    .btn { padding: 0.85rem 1.6rem; border-radius: 12px; border: 1px solid var(--border); background: rgba(8, 9, 36, 0.85); color: var(--text); font-weight: 600; letter-spacing: 0.05em; cursor: pointer; transition: all 0.25s ease; }
+    .btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 12px 30px rgba(76, 209, 255, 0.18); }
+
+    .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+    .slide { position: absolute; inset: 0; padding: 4.5rem 6vw 4rem; opacity: 0; transform: translateX(70px) scale(0.97); transition: opacity 520ms ease, transform 520ms ease; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+    .slide.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
+    .slide.prev { transform: translateX(-70px) scale(0.97); }
+
+    .slide-inner { width: min(1180px, 100%); min-height: calc(100vh - 9rem); display: flex; flex-direction: column; justify-content: center; gap: 1.4rem; background: rgba(8, 10, 38, 0.78); border: 1px solid var(--border); border-radius: 28px; padding: 3rem 3.6rem; box-shadow: 0 40px 90px rgba(3, 8, 43, 0.45); backdrop-filter: blur(24px); }
+    .slide.section .slide-inner { background: linear-gradient(130deg, rgba(76, 209, 255, 0.2), rgba(41, 231, 174, 0.16)); border-color: rgba(76, 209, 255, 0.4); }
+    .slide.cover .slide-inner { background: transparent; border: none; box-shadow: none; padding: 2rem 0; align-items: center; text-align: center; }
+
+    .kicker { font-family: 'Space Grotesk', sans-serif; font-size: 0.92rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-strong); }
+    h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(3rem, 6vw, 5.6rem); font-weight: 700; letter-spacing: -0.02em; }
+    h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.4rem, 4vw, 3.4rem); font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
+    h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+    p { font-size: 1.15rem; color: var(--muted); line-height: 1.74; max-width: 960px; }
+
+    ul { list-style: none; display: grid; gap: 0.8rem; }
+    li { font-size: 1.08rem; color: var(--text); padding-left: 1.4rem; position: relative; line-height: 1.6; }
+    li::before { content: ""; position: absolute; left: 0; top: 0.65rem; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px rgba(76,209,255,0.6); }
+
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 1.4rem; }
+    .badge { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.45rem 1.1rem; border-radius: 999px; border: 1px solid rgba(76, 209, 255, 0.45); color: var(--accent); background: rgba(76, 209, 255, 0.12); }
+    .badge.alt { border-color: rgba(41, 231, 174, 0.4); color: var(--accent-strong); background: rgba(41, 231, 174, 0.12); }
+
+    .grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .card { background: rgba(8, 9, 36, 0.85); border: 1px solid rgba(76, 209, 255, 0.18); border-radius: 20px; padding: 1.6rem 1.8rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; color: var(--accent); letter-spacing: 0.02em; }
+    .card p { font-size: 0.98rem; line-height: 1.6; color: var(--muted); }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+    .stat { background: rgba(12, 15, 42, 0.8); border: 1px solid rgba(41, 231, 174, 0.2); border-radius: 18px; padding: 1.4rem 1.8rem; }
+    .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 2.4rem; color: var(--accent-strong); letter-spacing: -0.02em; }
+    .stat-label { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(245, 248, 255, 0.75); margin-top: 0.3rem; }
+    .stat-detail { font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
+
+    .timeline { position: relative; padding-left: 2.2rem; display: grid; gap: 1.1rem; }
+    .timeline::before { content: ""; position: absolute; left: 0.7rem; top: 0.2rem; bottom: 0.2rem; width: 2px; background: linear-gradient(180deg, var(--accent), rgba(41, 231, 174, 0.7)); }
+    .timeline-item { position: relative; padding: 1rem 1.2rem; background: rgba(9, 10, 32, 0.85); border: 1px solid rgba(76, 209, 255, 0.16); border-radius: 16px; font-size: 1.05rem; line-height: 1.6; }
+    .timeline-item::before { content: ""; position: absolute; left: -1.52rem; top: 1.1rem; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 16px rgba(76, 209, 255, 0.8); }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 1rem 1.2rem; border-bottom: 1px solid rgba(76, 209, 255, 0.18); font-size: 1rem; text-align: left; }
+    th { font-family: 'Space Grotesk', sans-serif; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.9rem; }
+
+    pre { background: rgba(6, 8, 26, 0.9); border: 1px solid rgba(76, 209, 255, 0.18); border-radius: 16px; padding: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.7; color: var(--accent); margin-top: 1rem; overflow-x: auto; max-height: 360px; }
+    .code-note { font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; }
+
+    @media (max-width: 900px) {
+      .slide { padding: 3rem 1.5rem; }
+      .slide-inner { padding: 2.4rem; border-radius: 22px; }
+      h1 { font-size: clamp(2.4rem, 8vw, 4rem); }
+      h2 { font-size: clamp(2rem, 6vw, 3rem); }
+      .grid { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="counter" id="counter">1 / 49</div>
+
+  <div class="deck" id="deck"></div>
+
+  <div class="controls">
+    <button class="btn" id="prevBtn">⟵ Prev</button>
+    <button class="btn" id="nextBtn">Next ⟶</button>
+  </div>
+
+  <script>
+    const slidesData = [
+      { type: "cover", kicker: "PFE 2024/2025", title: "FitTech", subtitle: "Intelligent gym management with AI, NFC, and data-driven decisions", badges: ["Flutter", "Django REST", "Docker", "Google ML Kit", "Chargily Pay", "Codex Architecture"] },
+      { type: "bullets", kicker: "Agenda", title: "Today's Story", bullets: ["Vision & context", "Problem landscape", "FitTech platform overview", "Architecture & security", "AI & analytics", "Business impact & roadmap"] },
+      { type: "bullets", kicker: "Vision", title: "Transform every gym visit into a smart, data-backed experience", bullets: ["Deliver frictionless access with virtual NFC credentials", "Personalize programs through real-time pose intelligence", "Empower coaches and admins with actionable dashboards", "Unify web, mobile, and physical entry points in a single platform"] },
+      { type: "section", kicker: "Part I", title: "Problems Worth Solving" },
+      { type: "grid", kicker: "Challenge Landscape", title: "Why legacy gym systems fail modern athletes", cards: [
+        { title: "Manual Onboarding", description: "Paper-based contracts and delayed activation create poor first impressions." },
+        { title: "Fragile Access", description: "Magstripe cards are easily cloned or lost; no real-time revocation." },
+        { title: "Data Silos", description: "Attendance, workouts, and payments live in separate tools — zero correlation." },
+        { title: "No Insight", description: "Managers fly blind without peak-hour, churn, or trainer performance analytics." },
+        { title: "Slow Billing", description: "Manual payment reminders lead to revenue leakage and failed renewals." },
+        { title: "No Personalization", description: "Members receive generic programs without form feedback or progression tracking." }
+      ] },
+      { type: "bullets", kicker: "Member Pain", title: "Experience gaps for members", bullets: ["Wait ~12 minutes on average to register or renew", "Forget plastic badge → denied entry despite active subscriptions", "Receive copy-paste workout PDFs with no corrective guidance", "Cannot monitor real improvements or training streaks"] },
+      { type: "bullets", kicker: "Coach & Staff Pain", title: "Operational blockers for staff", bullets: ["Manual attendance scanning consumes 25% of session time", "No consolidated view of member adherence or warnings", "Complicated scheduling across group classes and personal trainings", "Zero context when members request adjustments mid-session"] },
+      { type: "stats", kicker: "Management Impact", title: "Business friction indicators", stats: [
+        { value: "18%", label: "Revenue Leakage", detail: "Lost renewals due to manual follow-ups and inconsistent billing." },
+        { value: "4.6★", label: "Rating Drop", detail: "Satisfaction declines when members wait >5 min at entrance." },
+        { value: "0", label: "Predictive Insight", detail: "Legacy stack offers no churn prediction or attendance forecasting." }
+      ] },
+      { type: "table", kicker: "Competitor Benchmark", title: "Existing solutions vs FitTech", headers: ["Platform", "Gaps Identified", "FitTech Edge"], rows: [
+        ["Generic Club Management", "Focus on billing only, no AI or NFC", "End-to-end AI, NFC, analytics"],
+        ["Legacy Access Control", "Hardware-dependent, zero mobile integration", "Virtual NFC + phone-based fallback"],
+        ["Fitness Apps", "Motivation & workouts but no facility integration", "Same app controls access, booking, and training"]
+      ] },
+      { type: "section", kicker: "Part II", title: "FitTech Solution" },
+      { type: "bullets", kicker: "Value Proposition", title: "A unified smart gym operating system", bullets: ["Virtual NFC entry using phone identity + physical badge fallback", "Pose-aware coaching with instant feedback loops", "Membership, booking, payments, and analytics under one roof", "Coach, admin, and member apps sharing a single truth"] },
+      { type: "grid", kicker: "Feature Pillars", title: "Platform building blocks", cards: [
+        { title: "Smart Access", description: "Virtual NFC, role-based doors, real-time logs, visitor analytics." },
+        { title: "Intelligent Training", description: "Google ML Kit powered pose tracking, personalized plans, progress dashboards." },
+        { title: "Dynamic Booking", description: "Courses, coaches, resources & attendance all orchestrated with waitlists." },
+        { title: "Integrated Payments", description: "Chargily checkout, automated renewals, failed-payment recovery flows." },
+        { title: "Coach Command Center", description: "Session planning, earnings insights, absence warnings, messaging." },
+        { title: "Executive Analytics", description: "Churn radar, peak-hour heatmaps, revenue funnel, cohort retention." }
+      ] },
+      { type: "table", kicker: "Persona Mapping", title: "Value by persona", headers: ["Persona", "Pain Solved", "Signature Feature"], rows: [
+        ["Members", "Slow entry, generic plans", "Virtual NFC + AI pose insights"],
+        ["Coaches", "Lack of session intel", "Coach dashboard & attendance automation"],
+        ["Managers", "No visibility or alerts", "Real-time analytics & anomaly detection"],
+        ["Admins", "Fractured tooling", "Single control plane with automation"]
+      ] },
+      { type: "bullets", kicker: "Differentiators", title: "What competitors cannot copy easily", bullets: ["Phone-as-pass with Android ID virtualization", "Automated ngrok orchestration that syncs with mobile app constants", "Cross-platform Flutter apps sharing Clean Architecture blocks", "Security-first backend with audit trails baked into every action"] },
+      { type: "stats", kicker: "Outcomes", title: "Target metrics within 3 months", stats: [
+        { value: "-70%", label: "Check-in Time", detail: "From 9 minutes average to under 3 minutes." },
+        { value: "+35%", label: "Class Utilization", detail: "Thanks to waitlists & smart notifications." },
+        { value: "96%", label: "Billing Success", detail: "Automated Chargily retrials & reminders." }
+      ] },
+      { type: "section", kicker: "Part III", title: "Architecture Overview" },
+      { type: "grid", kicker: "Platform Layers", title: "System topology", cards: [
+        { title: "Experience Layer", description: "Next.js web portal, Flutter FitTech app, Flutter Coach app." },
+        { title: "Gateway", description: "Django REST API behind ngrok, JWT authentication, rate limiting." },
+        { title: "Domain Services", description: "Auth, Subscription, Courses, NFC Access, Messaging, AI orchestration." },
+        { title: "Data & Intelligence", description: "MySQL cluster, Hive offline cache, analytics warehouse hooks." }
+      ] },
+      { type: "bullets", kicker: "Flow", title: "End-to-end data journey", bullets: ["Member taps phone → NFC service validates virtual UID", "Gateway enriches request with subscription and role context", "Domain services orchestrate bookings, payments, messaging", "Analytics pipeline captures every access & workout event"] },
+      { type: "timeline", kicker: "Request Trace", title: "How a course booking travels", items: [
+        "1. Member selects course → FitTech app sends POST /api/courses/{id}/book/",
+        "2. Backend validates subscription, capacity, cooldown windows",
+        "3. Chargily checkout initiated for paid sessions → returns hosted URL",
+        "4. On success webhook, booking status flips to confirmed + push notification",
+        "5. Coach dashboard receives real-time roster update"
+      ] },
+      { type: "table", kicker: "Environments", title: "Deployment matrix", headers: ["Environment", "Purpose", "Tooling"], rows: [
+        ["Local Dev", "Fullstack testing", "Docker Compose + ngrok auto script"],
+        ["Staging", "QA, user acceptance", "Docker swarm on internal server"],
+        ["Production", "Live gyms", "Managed containers + CDN + WAF"]
+      ] },
+      { type: "section", kicker: "Part IV", title: "Infrastructure & DevOps" },
+      { type: "bullets", kicker: "Stack", title: "Tech backbone", bullets: ["Dockerized services orchestrated via compose for local + swarm for prod", "Automated ngrok URL propagation into Flutter constants", "GitHub Actions pipeline with lint → test → build → deploy stages", "Structured logging with JSON format forwarded to ELK"] },
+      { type: "grid", kicker: "Pipeline", title: "CI/CD high-level flow", cards: [
+        { title: "1. Commit", description: "Pre-commit hooks lint & format Flutter, Python." },
+        { title: "2. Build", description: "GitHub Actions builds Docker images + Flutter APK." },
+        { title: "3. Scan", description: "Security scans using Bandit, Trivy, Snyk." },
+        { title: "4. Deploy", description: "Blue/green release with health checks and rollback hooks." }
+      ] },
+      { type: "bullets", kicker: "Reliability", title: "Availability & scaling", bullets: ["Stateless API containers enable horizontal scaling", "MySQL replica for read-heavy analytics", "Graceful degradation: NFC fallback to manual override with audit", "Synthetic monitoring on key endpoints every 5 minutes"] },
+      { type: "section", kicker: "Part V", title: "Security Architecture" },
+      { type: "grid", kicker: "Defense in Depth", title: "Security layers", cards: [
+        { title: "Authentication", description: "JWT access (15 min) + refresh (7 days) + blacklist on logout." },
+        { title: "Authorization", description: "Role-based scopes per endpoint, admin override with audit confirmation." },
+        { title: "Transport", description: "TLS enforced through ngrok & production reverse proxy, HSTS enabled." },
+        { title: "Data Integrity", description: "Daily backups, checksum validation, per-request audit log writes." }
+      ] },
+      { type: "timeline", kicker: "Zero Trust Flow", title: "Member NFC authentication journey", items: [
+        "Phone sends virtual UID + signed nonce via HTTPS",
+        "Backend resolves active NFCDevice tied to member role",
+        "Subscription status checked + daily usage quota validated",
+        "Decision logged with reason + risk flag if anomaly",
+        "Door/coach display updated in <150ms"
+      ] },
+      { type: "code", kicker: "SQL Shield", title: "Parameterized access log lookup", language: "python", code: "entry = AccessLog.objects.filter(\n    nfc_device=device,\n    timestamp__date=today\n).select_related('member').first()", note: "ORM-generated query uses prepared statements, eliminating SQL injection risk." },
+      { type: "table", kicker: "Threat Matrix", title: "Mitigation overview", headers: ["Threat", "Risk", "Mitigation"], rows: [
+        ["Badge cloning", "Unauthorized entry", "Virtual NFC + device fingerprint + rate limiting"],
+        ["Credential stuffing", "Account takeover", "JWT rotation + failed attempt throttling"],
+        ["Payment fraud", "Chargebacks", "Chargily callbacks + webhook signature validation"],
+        ["Data leak", "PII exposure", "Row-level permissions + encrypted backups"]
+      ] },
+      { type: "bullets", kicker: "Compliance", title: "Audit & governance", bullets: ["GDPR-aligned data retention & right-to-forget flows", "Full access trail with reason codes for every deny/allow", "Automated weekly security posture report for admins"] },
+      { type: "section", kicker: "Part VI", title: "Backend Domain" },
+      { type: "bullets", kicker: "Tech Stack", title: "Core backend technologies", bullets: ["Python 3.12 + Django REST Framework 3.x", "Celery for async jobs (reminders, analytics aggregation)", "Redis for short-lived caching + rate limiting", "Postman collections & OpenAPI docs for integrations"] },
+      { type: "grid", kicker: "Services", title: "Bounded contexts", cards: [
+        { title: "Auth Service", description: "Handles registration, OTP verification, JWT issuance, blacklist." },
+        { title: "Subscription Service", description: "Plans, billing cycles, Chargily integration, renewals." },
+        { title: "Access Control", description: "NFC device lifecycle, scan endpoints, access decisions." },
+        { title: "Courses & Booking", description: "Session scheduling, waitlists, attendance, coach assignments." },
+        { title: "Messaging & Chat", description: "Member ↔ coach messaging, AI bot intents, notification routing." },
+        { title: "Analytics Hub", description: "Aggregates KPIs, churn radar, pose accuracy metrics for dashboards." },
+        { title: "Payments & Billing", description: "Chargily webhooks, retry logic, invoice ledger, refund workflows." },
+        { title: "Content Delivery", description: "Workout media CDN links, nutrition plan templates, localization packs." }
+      ] },
+      { type: "bullets", kicker: "Performance", title: "Speed & resilience tactics", bullets: ["Selective prefetch_related to avoid N+1 queries", "Redis cache for frequently accessed public plan catalog", "Chunked access-log archival to object storage", "Idempotent booking endpoints to avoid double charges"] },
+      { type: "section", kicker: "Part VII", title: "Data Layer" },
+      { type: "bullets", kicker: "ER Highlights", title: "Key relationships", bullets: ["Member ↔ Subscription ↔ Plan with polymorphic plan types", "NFCDevice polymorphically linked to Member / Coach / Admin", "AccessLog capturing every allow/deny with reason", "WorkoutLog storing pose accuracy, reps, weight per session"] },
+      { type: "table", kicker: "Entities", title: "Strategic tables", headers: ["Entity", "Purpose", "Notes"], rows: [
+        ["users_member", "Primary member profile", "Email unique, ties to subscription & access"],
+        ["access_control_nfcdevice", "Virtual & physical identifiers", "Checks active flag + role before entry"],
+        ["courses_coursebooking", "Booking state machine", "Unique per course/day/member to prevent duplicates"],
+        ["payments_transaction", "Chargily handshake", "Stores status, amount, webhook reference"]
+      ] },
+      { type: "timeline", kicker: "Lifecycle", title: "Subscription state transitions", items: [
+        "Pending → payment awaiting Chargily confirmation",
+        "Active → entry allowed, countdown on sessions or days",
+        "Grace → expiring soon notifications to app + email",
+        "Expired → access denied until renewal",
+        "Cancelled → archived but history retained for analytics"
+      ] },
+      { type: "bullets", kicker: "Analytics", title: "Logging & intelligence", bullets: ["Aggregated attendance per device → heatmaps", "Pose accuracy scores → injury risk alerts", "Revenue funnel by plan type → pricing experiments", "Daily exports to BI warehouse via secure S3 drop"] },
+      { type: "section", kicker: "Part VIII", title: "Mobile Platform" },
+      { type: "grid", kicker: "FitTech App", title: "Member experience modules", cards: [
+        { title: "Access Wallet", description: "Virtual NFC toggle, membership status, usage history." },
+        { title: "Course Booking", description: "Filter by coach, difficulty, availability, waitlist support." },
+        { title: "Workout Companion", description: "AI pose detection, rep counting, form cues with ML Kit." },
+        { title: "Payments & Billing", description: "Chargily checkout, upcoming renewals, invoice history." }
+      ] },
+      { type: "grid", kicker: "Coach App", title: "Coach mission control", cards: [
+        { title: "Daily Agenda", description: "Chronological session view with roster health signals." },
+        { title: "Attendance Hub", description: "Tap-to-confirm presence, NFC scanning, absence flags." },
+        { title: "Performance Feed", description: "Member streaks, adherence, nutrition-bot interactions." },
+        { title: "Earnings", description: "Commission tracking, payout timelines, bonus insights." }
+      ] },
+      { type: "bullets", kicker: "Shared Platform", title: "Cross-app foundations", bullets: ["Clean Architecture (data ↔ domain ↔ presentation) per feature", "GetIt for dependency injection across BLoC classes", "App-wide theming + design tokens for consistent brand", "Hive for secure offline cache of vital endpoints"] },
+      { type: "bullets", kicker: "Offline & Reliability", title: "Mobile resilience", bullets: ["Read-only fallback for bookings & membership cards", "Queued scans when offline → auto-sync once connected", "Graceful degradation of AI features with user messaging"] },
+      { type: "section", kicker: "Part IX", title: "AI & Analytics" },
+      { type: "grid", kicker: "AI Modules", title: "Machine intelligence portfolio", cards: [
+        { title: "Pose Detection", description: "Google ML Kit full-body model at 30 FPS on-device." },
+        { title: "Repetition Counter", description: "Angle thresholds determine concentric/eccentric reps." },
+        { title: "Nutrition Bot", description: "Intent classification + curated meal plans + hydration tips." },
+        { title: "Churn Radar", description: "Subscription + attendance signals flag at-risk members." }
+      ] },
+      { type: "stats", kicker: "Benchmark", title: "AI performance snapshot", stats: [
+        { value: "92%", label: "Pose Accuracy", detail: "Validation against ground-truth dataset." },
+        { value: "45ms", label: "Inference Latency", detail: "Average per frame on flagship Android devices." },
+        { value: "3%", label: "False Alerts", detail: "AI feedback tuned to minimize noise." }
+      ] },
+      { type: "bullets", kicker: "Roadmap", title: "Next-gen intelligence", bullets: ["Velocity-based strength scoring via phone IMU", "Adaptive workout plans powered by reinforcement learning", "Computer vision assisted equipment usage heatmaps", "Predictive maintenance alerts for hardware via anomaly detection"] },
+      { type: "section", kicker: "Part X", title: "Business Impact & Conclusion" },
+      { type: "stats", kicker: "KPIs", title: "Expected first-year impact", stats: [
+        { value: "+28%", label: "Retention", detail: "Personalized programs + rapid access keep members engaged." },
+        { value: "+18%", label: "ARPU", detail: "Upsells through targeted nutrition and premium AI plans." },
+        { value: "-40%", label: "Staff Load", detail: "Automation frees coaches to focus on coaching." }
+      ] },
+      { type: "bullets", kicker: "Closing", title: "Why FitTech matters", bullets: ["Bridges physical and digital fitness journeys seamlessly", "Turns every access or workout into actionable data", "Scales from boutique studios to enterprise chains", "Built with security, automation, and AI at the core" ] }
+    ];
+
+    const deckEl = document.getElementById('deck');
+
+    function renderSlide(data) {
+      const slide = document.createElement('div');
+      slide.className = 'slide' + (data.type === 'cover' ? ' cover' : '') + (data.type === 'section' ? ' section' : '');
+      const inner = document.createElement('div');
+      inner.className = 'slide-inner';
+
+      if (data.type === 'cover') {
+        inner.innerHTML = `
+          <div class="kicker">${data.kicker || ''}</div>
+          <h1>${data.title || ''}</h1>
+          <p>${data.subtitle || ''}</p>
+          ${data.badges ? `<div class="badge-group">${data.badges.map(b => `<span class="badge">${b}</span>`).join('')}</div>` : ''}
+        `;
+      } else if (data.type === 'section') {
+        inner.innerHTML = `
+          <div class="kicker">${data.kicker || ''}</div>
+          <h2>${data.title || ''}</h2>
+          ${data.subtitle ? `<p>${data.subtitle}</p>` : ''}
+        `;
+      } else {
+        let content = '';
+        if (data.kicker) content += `<div class="kicker">${data.kicker}</div>`;
+        if (data.title) content += `<h2>${data.title}</h2>`;
+        if (data.subtitle) content += `<p>${data.subtitle}</p>`;
+
+        if (data.bullets) {
+          content += `<ul>${data.bullets.map(item => `<li>${item}</li>`).join('')}</ul>`;
+        }
+        if (data.cards) {
+          content += `<div class="grid">${data.cards.map(card => `
+            <div class="card">
+              <h4>${card.title}</h4>
+              <p>${card.description}</p>
+            </div>
+          `).join('')}</div>`;
+        }
+        if (data.stats) {
+          content += `<div class="stats">${data.stats.map(stat => `
+            <div class="stat">
+              <div class="stat-value">${stat.value}</div>
+              <div class="stat-label">${stat.label}</div>
+              ${stat.detail ? `<div class="stat-detail">${stat.detail}</div>` : ''}
+            </div>
+          `).join('')}</div>`;
+        }
+        if (data.timeline || data.items) {
+          const items = data.timeline || data.items;
+          content += `<div class="timeline">${items.map(item => `<div class="timeline-item">${item}</div>`).join('')}</div>`;
+        }
+        if (data.headers && data.rows) {
+          content += `<table>
+            <thead><tr>${data.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+            <tbody>${data.rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody>
+          </table>`;
+        }
+        if (data.code) {
+          content += `<pre><code>${data.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
+          if (data.note) content += `<div class="code-note">${data.note}</div>`;
+        }
+
+        inner.innerHTML = content;
+      }
+
+      slide.appendChild(inner);
+      return slide;
+    }
+
+    slidesData.forEach((slideData, index) => {
+      const slideEl = renderSlide(slideData);
+      if (index === 0) slideEl.classList.add('active');
+      deckEl.appendChild(slideEl);
+    });
+
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progressBar = document.getElementById('progressBar');
+    const counter = document.getElementById('counter');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentIndex);
+        slide.classList.toggle('prev', index < currentIndex);
+      });
+      const progress = ((currentIndex + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progress}%`;
+      counter.textContent = `${currentIndex + 1} / ${totalSlides}`;
+    }
+
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) {
+        currentIndex++;
+        updateSlides();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlides();
+      }
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', nextSlide);
+    document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') {
+        nextSlide();
+      } else if (event.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+  </script>
+</body>
+</html>
