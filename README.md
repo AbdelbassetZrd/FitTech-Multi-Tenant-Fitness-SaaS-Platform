@@ -1,4 +1,22 @@
-# FitTech
+<p align="center">
+  <img src="assets/logo.png" alt="FitTech logo" width="220" />
+</p>
+
+<h1 align="center">FitTech</h1>
+
+<p align="center">
+  <b>Multi-Tenant Fitness SaaS Platform</b><br/>
+  Operations, members, coaches, classes, payments, inventory, and AI-powered coaching in one place.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-10B981" alt="License: MIT" />
+  <img src="https://img.shields.io/badge/backend-Django-092E20" alt="Django" />
+  <img src="https://img.shields.io/badge/web-Next.js-000000" alt="Next.js" />
+  <img src="https://img.shields.io/badge/mobile-Flutter-02569B" alt="Flutter" />
+</p>
+
+---
 
 **FitTech** is a multi-tenant SaaS platform that gives gym brands a single place to run operations, members, coaches, classes, payments, inventory, and AI-powered coaching. The repository bundles every surface of the product—Django backend, React/Next.js dashboards, and two Flutter apps (member + coach)—along with tooling to run the stack locally with one command.
 
@@ -25,6 +43,7 @@
 
 ```
 FitTech/
+├── assets/           # Logo and branding files
 ├── backend/          # Django project: auth, scheduling, payments, AI, notifications, etc.
 ├── frontend/         # Next.js dashboard for admins, moderators, superadmins
 ├── mobile/
@@ -37,6 +56,7 @@ FitTech/
 ├── .logs/            # Aggregated logs when services run locally
 ├── RUNALL.md         # Extended documentation for the orchestration script
 ├── SUBSCRIPTION_IMPLEMENTATION_GUIDE.md  # Business rules for subscription flows
+├── LICENSE           # MIT License
 └── README.md         # You are here
 ```
 
@@ -54,8 +74,8 @@ FitTech/
 
 ```bash
 # Clone & enter the repo
-git clone <repo-url>
-cd Fittech
+git clone https://github.com/AbdelbassetZrd/FitTech-Multi-Tenant-Fitness-SaaS-Platform.git
+cd FitTech-Multi-Tenant-Fitness-SaaS-Platform
 
 # Ensure helper scripts are executable
 chmod +x run_all.sh stop_all.sh
@@ -119,6 +139,19 @@ Refer to `RUNALL.md` for advanced script flags, environment variable expectation
 - `anotherpresentation/FitTech_PFE_presentation.html` – interactive deck containing diagrams, benchmarks, and architecture notes
 - Backend Swagger UI at `http://127.0.0.1:8000/swagger/` after running the backend
 
+## Team
+
+FitTech is developed by students of **ESI SBA** (École Supérieure en Informatique, Sidi Bel Abbès):
+
+| Name |
+|------|
+| Abdelbasset Zerradi |
+| Ibrahim Oueld Mohammed |
+| Walid Hadjbouziane |
+| Badis Kherarba |
+| Islam Touil |
+| Ghalem |
+
 ## Contributing & Support
 
 1. Fork the repository and create feature branches per domain (`feature/backend-course-waitlist`, etc.).
@@ -127,3 +160,8 @@ Refer to `RUNALL.md` for advanced script flags, environment variable expectation
 4. Document architectural decisions in the presentation deck or dedicated docs to keep the knowledge base aligned.
 
 For questions or onboarding help, review the presentation deck and domain-specific docs listed above—they explain how components connect and the reasoning behind major engineering decisions.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+© 2026 The FitTech team — ESI SBA.
